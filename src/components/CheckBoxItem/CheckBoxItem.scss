@@ -1,0 +1,28 @@
+.list-checkbox{
+    display: none;
+    height: 3.3rem;
+    width: 100%;
+    padding: 0.4rem;
+    margin-left: 1rem;
+    border-bottom: 1px solid rgb(219,219,219);
+  
+    &:last-child{
+        border: none;
+    }
+    .check-box-input{
+        width: 2.4rem;
+        height: 2.4rem;
+        padding: 0.4rem;
+        justify-content: center;
+        input{
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+    }
+    .checkbox-name{
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+        margin-left: 1rem;
+    }
+}

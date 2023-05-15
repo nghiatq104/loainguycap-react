@@ -1,0 +1,28 @@
+.filter-checkBox{
+    width: 100%;
+    border-bottom: 1px solid rgb(219,219,219);
+    cursor: pointer;
+    .filter-title{
+        height: 3.4rem;
+        .filter-icon{
+            font-size: 1.8rem;
+            transition: 1s ease-in-out;
+            width: 3.4rem;
+            height: 100%;
+            .roltate{
+                transition: 0.5s ease-out;
+                transform: rotate(90deg);
+            }
+        }
+        
+        .filter-name{
+            font-size: 2rem;
+            margin-left: 1rem;
+            font-weight: 700;
+        }
+    }
+    .hidden{
+        display: none;
+    }
+    
+}

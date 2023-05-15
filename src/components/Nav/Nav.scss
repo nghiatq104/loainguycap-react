@@ -1,0 +1,42 @@
+.nav-bar{
+    background-color: rgba(76, 75, 74, 1);
+    height: 6rem;
+    .nav-left{
+        height: 100%;
+        width: 35rem;
+    }
+    .nav-right{
+        height: 100%;
+        flex: 1;
+        justify-content: space-between;
+        .tab{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            .current{
+                background-color: rgba(42, 37, 37, 1);
+                border-bottom: 1px solid rgba(76, 75, 74, 1);
+            }
+        }
+        .export-EX{
+            height: 100%;
+            cursor: pointer;
+            margin-right: 1rem;
+            .export{
+                height: 3.6rem;
+                width: 3.6rem;
+                background-color: rgba(76, 75, 74, 1);
+                border: none;
+                border-radius: 50%;
+                i{
+                    color: #fff;
+                    font-size: 2rem;
+                }
+                &:hover{
+                    background-color: rgba(112, 111, 110, 1);
+                }
+            }
+        }
+    }
+}
