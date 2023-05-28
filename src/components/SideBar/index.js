@@ -1,12 +1,12 @@
+import React, { useState, useEffect, useMemo } from "react";
 import "./SideBar.scss";
 import BreakLine from "./BreakLine.js";
 import ListCheckBox from "../ListCheckBox";
-import { useState } from "react";
-import { useEffect } from "react";
-import getData from "../../Data/GetData";
-import API from "../../Data/Api";
+import getData from "../../utils/GetData";
+import API from "../../Constant/Api";
 
-function SideBar(props) {
+const SideBar = React.memo(() => {
+  console.log("Sidebar loaded");
   let [lisCurrent, setListCurrent] = useState([]);
   let [listProvince, setListProvince] = useState([]);
   let [listRedBook, setListRedBook] = useState([]);
@@ -34,44 +34,41 @@ function SideBar(props) {
       filter: "&iucn_ids[]=",
     },
   ];
-  useEffect(() => {
-    async function returnData() {
-      let data = await getData(API.ListProvince);
-      const newArr = [];
-      data.forEach((data) => {
-        newArr.push({
-          id: data.id,
-          name: data.name,
-        });
+
+  useMemo(async function returnData() {
+    let data = await getData(API.ListProvince);
+    const newArr = [];
+    data.forEach((data) => {
+      newArr.push({
+        id: data.id,
+        name: data.name,
       });
-      setListProvince(newArr);
-    }
-    returnData();
+    });
+    setListProvince(newArr);
   }, []);
-  useEffect(() => {
-    async function returnData() {
-      let data = await getData(API.ListRedBook);
-      let data1 = data[0].childs;
-      let data2 = data[1].childs;
-      const newArr1 = [];
-      const newArr2 = [];
-      data1.forEach((data) => {
-        newArr1.push({
-          id: data.id,
-          name: data.ma_danh_muc + " " + data.ten,
-        });
+
+  useMemo(async function returnData() {
+    let data = await getData(API.ListRedBook);
+    let data1 = data[0].childs;
+    let data2 = data[1].childs;
+    const newArr1 = [];
+    const newArr2 = [];
+    data1.forEach((data) => {
+      newArr1.push({
+        id: data.id,
+        name: data.ma_danh_muc + " " + data.ten,
       });
-      data2.forEach((data) => {
-        newArr2.push({
-          id: data.id,
-          name: data.ma_danh_muc + " " + data.ten,
-        });
+    });
+    data2.forEach((data) => {
+      newArr2.push({
+        id: data.id,
+        name: data.ma_danh_muc + " " + data.ten,
       });
-      setListIUCN(newArr2);
-      setListRedBook(newArr1);
-    }
-    returnData();
+    });
+    setListIUCN(newArr2);
+    setListRedBook(newArr1);
   }, []);
+
   useEffect(() => {
     async function returnData() {
       let data = await getData(API.ListCurrent);
@@ -99,11 +96,11 @@ function SideBar(props) {
         <BreakLine />
         <div className="radio-container">
           <div className=" d-flex align-items-center">
-            <input name="type-radio-sideBar" type="radio" />
+            <input name="radio-sideBar" type="radio" />
             <div>Loài</div>
           </div>
           <div className=" d-flex align-items-center">
-            <input name="type-radio-sideBar" type="radio" />
+            <input name="radio-sideBar" type="radio" />
             <div>Văn bản tài liệu</div>
           </div>
         </div>
@@ -124,15 +121,11 @@ function SideBar(props) {
               filter={item.filter}
               name={item.name}
               data={item.data}
-              api={props.api}
-              setApi={props.setApi}
-              apiChart={props.apiChart}
-              setApiChart={props.setApiChart}
             />
           );
         })}
       </div>
     </div>
   );
-}
+});
 export default SideBar;

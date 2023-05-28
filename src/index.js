@@ -1,13 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import ApiProvider from "./Context/ApiContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <App />
+    <Router>
+      <ApiProvider>
+        <App />
+      </ApiProvider>
+    </Router>
   </>
 );
 

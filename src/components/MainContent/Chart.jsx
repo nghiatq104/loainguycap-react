@@ -4,8 +4,8 @@ import { Chart, ArcElement } from "chart.js";
 Chart.register(ArcElement);
 
 function Charts(props) {
+  console.log("chart loaded");
   const data = props.data;
-  console.log(data);
   return (
     <div className="chart-content">
       <h4>Hệ sinh thái</h4>

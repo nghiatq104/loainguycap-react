@@ -1,24 +1,41 @@
 import MainContentItem from "../MainContentItem";
 import BreakLine from "../SideBar/BreakLine";
 import "./MainContent.scss";
-import API from "../../Data/Api";
-import getData from "../../Data/GetData";
-import { useEffect, useState } from "react";
+import API from "../../Constant/Api";
+import getData from "../../utils/GetData";
+// import getAxiosData from "../../utils/AxiosData";
+import React, { useContext, useEffect, useState } from "react";
 import Charts from "./Chart";
 import TableHeader from "./TableHeader";
+import { apiContext } from "../../Context/ApiContext";
+import { NavTab } from "../../Context/NavTab";
 
-function MainContent(props) {
-  let api = props.api;
+const MainContent = React.memo((props) => {
+  console.log("load main content");
+  const { tabIndex } = useContext(NavTab);
+  const value = useContext(apiContext);
   const [postList, setPostList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [newpostList, setnewPostList] = useState([]);
+  const [loading, setLoading] = useState("");
+  const [hideLoad, setHideLoad] = useState("");
+  const [btnLoad, setBtnLoad] = useState("");
 
+  // useEffect(() => {
+  //   async function getDataTest() {
+  //     const data = await getAxiosData(API.listSpecies, "");
+  //     // console.log(data);
+  //   }
+  //   getDataTest();
+  // });
+  // load data mac dinh
   useEffect(() => {
-    setPage(1);
     async function getApiData() {
       try {
-        const Data = await getData(api);
+        setLoading("loading");
+        setHideLoad("hideLoad");
+        const Data = await getData(value.api);
         const data = Data.list;
         const count = Data.pagination;
         const newData = [];
@@ -41,6 +58,7 @@ function MainContent(props) {
             images = API.domain + item.attachments[0].path;
           }
           newData.push({
+            id: item.id,
             name: item.ten,
             ten_khoa_hoc: item.ten_khoa_hoc,
             images: images,
@@ -51,57 +69,63 @@ function MainContent(props) {
             iucns: iucns,
           });
         });
+        setLoading("");
+        setHideLoad("");
         setPostList(newData);
+        setPage(1);
       } catch (error) {
         console.log("ERROR: " + error);
       }
     }
     getApiData();
-  }, [api]);
+  }, [value.api]);
 
+  // load them data
   useEffect(() => {
     async function getApiData() {
       if (page > 1) {
         try {
+          setBtnLoad("loading");
           const newData = [];
           let oldPage = "page=1";
-          for (let i = 2; i <= page; i++) {
-            let newPage = "page=" + i;
-            let newApi = api.replace(oldPage, newPage);
-            const Data = await getData(newApi);
-            const data = Data.list;
-            const count = Data.pagination;
-            setTotal(count.total);
-            data.forEach((item) => {
-              let loai_hien_trang = null;
-              let sach_dos = null;
-              let iucns = null;
-              let images = API.domain + "/static/img/image4.5aecb9b5.png";
-              if (item.loai_hien_trang) {
-                loai_hien_trang = item.loai_hien_trang.ten;
-              }
-              if (item.sach_dos.length > 0) {
-                sach_dos = item.sach_dos[0].ma_danh_muc;
-              }
-              if (item.iucns.length > 0) {
-                iucns = item.iucns[0].ma_danh_muc;
-              }
-              if (item.attachments.length > 0) {
-                images = API.domain + item.attachments[0].path;
-              }
-              newData.push({
-                name: item.ten,
-                ten_khoa_hoc: item.ten_khoa_hoc,
-                images: images,
-                kingdom: item.kingdom.ten,
-                phylumn: item.phylumn.ten,
-                loai_hien_trang: loai_hien_trang,
-                sach_dos: sach_dos,
-                iucns: iucns,
-              });
+          let newPage = "page=" + page;
+          let newApi = value.api.replace(oldPage, newPage);
+          const Data = await getData(newApi);
+          const data = Data.list;
+          const count = Data.pagination;
+          setTotal(count.total);
+          data.forEach((item) => {
+            console.log(item);
+            let loai_hien_trang = null;
+            let sach_dos = null;
+            let iucns = null;
+            let images = API.domain + "/static/img/image4.5aecb9b5.png";
+            if (item.loai_hien_trang) {
+              loai_hien_trang = item.loai_hien_trang.ten;
+            }
+            if (item.sach_dos.length > 0) {
+              sach_dos = item.sach_dos[0].ma_danh_muc;
+            }
+            if (item.iucns.length > 0) {
+              iucns = item.iucns[0].ma_danh_muc;
+            }
+            if (item.attachments.length > 0) {
+              images = API.domain + item.attachments[0].path;
+            }
+            newData.push({
+              id: item.id,
+              name: item.ten,
+              ten_khoa_hoc: item.ten_khoa_hoc,
+              images: images,
+              kingdom: item.kingdom.ten,
+              phylumn: item.phylumn.ten,
+              loai_hien_trang: loai_hien_trang,
+              sach_dos: sach_dos,
+              iucns: iucns,
             });
-          }
-          setnewPostList(newData);
+          });
+          setnewPostList((prevData) => [...prevData, ...newData]);
+          setBtnLoad("");
         } catch (error) {
           console.log("ERROR: " + error);
         }
@@ -110,9 +134,7 @@ function MainContent(props) {
       }
     }
     getApiData();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, value.api]);
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -126,7 +148,7 @@ function MainContent(props) {
 
   useEffect(() => {
     async function drawChart() {
-      const chart = await getData(props.apiChart);
+      const chart = await getData(value.apiChart);
       const data = chart.hesinhthai;
       setChartData({
         labels: data.map((data) => data.ten),
@@ -139,19 +161,19 @@ function MainContent(props) {
       });
     }
     drawChart();
-  }, [props.apiChart]);
+  }, [value.apiChart]);
 
   let html1 = [];
   let html2 = [];
   let html3 = [];
   let hidden = "";
 
-  props.active === 1
+  tabIndex === 1
     ? html1.push(<TableHeader key={-1} />) &&
       html2.push(<TableHeader key={-2} />)
     : html1.push(<div key={-1}></div>) && html2.push(<div key={-2}></div>);
 
-  props.active < 2
+  tabIndex < 2
     ? postList.map((data, i) => {
         if (i >= 0 && i < 6) {
           return html1.push(
@@ -159,7 +181,7 @@ function MainContent(props) {
               key={i}
               imgState={true}
               data={data}
-              active={props.active}
+              active={tabIndex}
             />
           );
         } else {
@@ -168,7 +190,7 @@ function MainContent(props) {
               key={i}
               imgState={false}
               data={data}
-              active={props.active}
+              active={tabIndex}
             />
           );
         }
@@ -182,7 +204,7 @@ function MainContent(props) {
             key={i}
             imgState={false}
             data={data}
-            active={props.active}
+            active={tabIndex}
           />
         );
       })
@@ -192,24 +214,30 @@ function MainContent(props) {
     <div className="main-content">
       <div className="outstanding-content mb-5">
         <h4>Kết quả ({total}) </h4>
-        <div className={props.className}>{html1}</div>
+        <div className={loading}></div>
+        <div className={props.className + " " + hideLoad}>{html1}</div>
       </div>
       <div className={hidden}>
         <BreakLine />
-        <div className="other-content">
-          <h4>Kết quả khác</h4>
-          <div className={props.className}>
-            {html2}
-            {html3}
+        {total >= 6 ? (
+          <div className="other-content">
+            <h4>Kết quả khác</h4>
+            <div className={loading}></div>
+            <div className={props.className + " " + hideLoad}>
+              {html2}
+              {html3}
+            </div>
+            <div className={"text-center " + btnLoad + " " + hideLoad}>
+              <button className="btn-more" onClick={() => setPage(page + 1)}>
+                Tải thêm
+              </button>
+            </div>
           </div>
-          <div className="text-center">
-            <button className="btn-more" onClick={() => setPage(page + 1)}>
-              Tải thêm
-            </button>
-          </div>
-        </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
-}
+});
 export default MainContent;

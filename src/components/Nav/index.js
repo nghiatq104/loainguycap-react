@@ -1,16 +1,22 @@
 import "./Nav.scss";
 import NavBtn from "../NavBtn";
-import { useEffect, useState } from "react";
-import getData from "../../Data/GetData";
+import React, { useContext, useEffect, useState } from "react";
+import getData from "../../utils/GetData";
 import * as XLSX from "xlsx";
+import { apiContext } from "../../Context/ApiContext";
+import { NavTab } from "../../Context/NavTab";
+import useDebounce from "../../hook/Debounce";
 
-function Nav(props) {
-  const api = props.api;
+const Nav = React.memo(() => {
+  console.log("Nav loaded");
+
+  const context = useContext(NavTab);
+  const value = useContext(apiContext);
   const [exportData, setExportData] = useState([]);
 
   useEffect(() => {
     async function getDataExport() {
-      const data = await getData(api);
+      const data = await getData(value.api);
       let newData = data.list;
       const arr = [];
       newData.forEach((data) => {
@@ -25,15 +31,15 @@ function Nav(props) {
       setExportData(arr);
     }
     getDataExport();
-  }, [api]);
+  }, [value.api]);
 
-  const exportExcel = () => {
+  const exportExcel = useDebounce(() => {
     let filename = "loai.xlsx";
     var wb = XLSX.utils.book_new();
     var ws = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(wb, ws, "loai");
     XLSX.writeFile(wb, filename);
-  };
+  }, 500);
 
   const navBtn = [
     {
@@ -65,23 +71,24 @@ function Nav(props) {
     },
   ];
 
-  let html = navBtn.map((data, i) => {
-    return (
-      <NavBtn
-        key={i}
-        id={i}
-        name={data.name}
-        icon={data.icon}
-        onClick={props.handleClick}
-        active={props.active === i ? "current" : ""}
-      />
-    );
-  });
   return (
     <div className="nav-bar d-flex align-items-center">
       <div className="nav-left"></div>
       <div className="nav-right d-flex align-items-center">
-        <div className="tab">{html}</div>
+        <div className="tab">
+          {navBtn.map((data, i) => {
+            return (
+              <NavBtn
+                key={i}
+                id={i}
+                name={data.name}
+                icon={data.icon}
+                onClick={context.handleClick}
+                active={context.tabIndex === i ? "current" : ""}
+              />
+            );
+          })}
+        </div>
         <div className="export-EX d-flex align-items-center justyfy-content-center">
           <button className="export btn" onClick={exportExcel}>
             <i className="fa-solid fa-file-excel"></i>
@@ -91,5 +98,5 @@ function Nav(props) {
       </div>
     </div>
   );
-}
+});
 export default Nav;

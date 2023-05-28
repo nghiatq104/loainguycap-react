@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import CheckBoxItem from "../CheckBoxItem";
 import "./ListCheckBox.scss";
 
-function ListCheckBox(props) {
+const ListCheckBox = React.memo((props) => {
+  console.log("list checkbox load");
   let [hidden, setHidden] = useState("hidden");
   let [roltate, setRoltate] = useState("");
   let [boolean, setBoolean] = useState(false);
@@ -11,6 +12,7 @@ function ListCheckBox(props) {
     boolean ? setRoltate("") : setRoltate("roltate");
     setBoolean(!boolean);
   };
+
   const arr = props.data;
 
   return (
@@ -26,20 +28,10 @@ function ListCheckBox(props) {
       </div>
       <div className={hidden}>
         {arr.map((data, i) => {
-          return (
-            <CheckBoxItem
-              key={i}
-              data={data}
-              filter={props.filter}
-              api={props.api}
-              setApi={props.setApi}
-              apiChart={props.apiChart}
-              setApiChart={props.setApiChart}
-            />
-          );
+          return <CheckBoxItem key={i} data={data} filter={props.filter} />;
         })}
       </div>
     </form>
   );
-}
+});
 export default ListCheckBox;

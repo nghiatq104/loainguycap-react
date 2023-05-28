@@ -1,9 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import API from "../../Constant/Api";
 import "./MainContentItem.scss";
-function MainContentItem(props) {
+
+const MainContentItem = (props) => {
+  const navigate = useNavigate();
   const arr = props.data;
   const active = props.active;
   let gridItem = (
-    <div className="col-12 col-sm-12 col-md-6 col-lg-4 item-container">
+    <div
+      className="col-12 col-sm-12 col-md-6 col-lg-4 item-container"
+      onClick={() => navigate(`/loai/${arr.id}`)}
+    >
       <div className="item-content">
         {props.imgState && (
           <div className="img-container">
@@ -20,7 +27,17 @@ function MainContentItem(props) {
               <i>{arr.ten_khoa_hoc}</i>
             </p>
           </div>
-          <div className="qr"></div>
+          <div className="qr">
+            <img
+              alt=""
+              src={
+                "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
+                API.domain +
+                "species/" +
+                arr.id
+              }
+            />
+          </div>
         </div>
         <div className="item-status d-flex">
           {arr.loai_hien_trang ? (
@@ -44,7 +61,7 @@ function MainContentItem(props) {
     </div>
   );
   let tableItem = (
-    <div className="Table">
+    <div className="Table" onClick={() => navigate(`/loai/${arr.id}`)}>
       <p>{arr.name}</p>
       <p>{arr.ten_khoa_hoc}</p>
       {arr.loai_hien_trang ? (
@@ -56,5 +73,5 @@ function MainContentItem(props) {
     </div>
   );
   return <>{active === 0 ? gridItem : tableItem}</>;
-}
+};
 export default MainContentItem;

@@ -1,16 +1,33 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./header.scss";
-import getData from "../../Data/GetData";
+import getData from "../../utils/GetData";
+import React from "react";
+import { Link } from "react-router-dom";
+import { apiContext } from "../../Context/ApiContext";
+import useDebounce from "../../hook/Debounce";
 
-function Header(props) {
-  let api = props.api;
+const Header = React.memo(() => {
+  console.log("header-load");
+  const value = useContext(apiContext);
   const [keys, setkeys] = useState("");
   const [oldkeys, setoldkeys] = useState("");
-  const [searchApi, setSearchApi] = useState(api);
+  const [searchApi, setSearchApi] = useState(value.api);
   const [searchData, setSearchData] = useState([]);
+
+  const onInputHandle = useDebounce((valueInput) => {
+    valueInput = valueInput.replace(/[. -]/g, "+");
+    // console.log(valueInput);
+
+    valueInput === ""
+      ? setkeys("")
+      : setkeys("&search=" + valueInput) && oldkeys === ""
+      ? setSearchApi(value.api + keys)
+      : setSearchApi(value.api.replace(oldkeys, keys));
+  }, 300);
 
   useEffect(() => {
     async function getDataSearch() {
+      // console.log(searchApi, 3);
       const data = await getData(searchApi);
       let itemData = data.list;
       const arr = [];
@@ -24,20 +41,7 @@ function Header(props) {
     }
     getDataSearch();
   }, [searchApi]);
-  const onInputHandle = (e) => {
-    // let newParam = "&search=" + e.target.value;
-    if (e.target.value !== "") {
-      setkeys("&search=" + e.target.value);
-      if (oldkeys === "") {
-        setSearchApi(api + keys);
-      } else {
-        let origApi = api.replace(oldkeys, keys);
-        setSearchApi(origApi);
-      }
-    } else {
-      setkeys("");
-    }
-  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -46,31 +50,31 @@ function Header(props) {
   };
   const searchBtn = () => {
     if (oldkeys === "") {
-      props.setApi(api + keys);
+      value.setApi(value.api + keys);
     } else {
-      let origApi = api.replace(oldkeys, keys);
-      props.setApi(origApi);
+      let origApi = value.api.replace(oldkeys, keys);
+      value.setApi(origApi);
     }
     setoldkeys(keys);
   };
-  console.log(searchData);
+
   return (
     <div className="header">
-      <div className="login">
+      <Link to="/dangnhap" className="login">
         <button id="login">Đăng nhập</button>
-      </div>
+      </Link>
 
       <div className="header-container">
-        <div className="icon">
+        <Link to="/" className="icon">
           <img src="/images/logoColor.png" alt="" />
-        </div>
+        </Link>
         <div className="search-bar">
           <form className="search-in">
             <input
               id="ser-input"
               type="text"
               placeholder="Tìm kiếm"
-              onChange={(e) => onInputHandle(e)}
+              onInput={(e) => onInputHandle(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
             <div className="info-search">
@@ -78,7 +82,7 @@ function Header(props) {
                 searchData.map((data, i) => {
                   if (i >= 0 && i < 3) {
                     return (
-                      <div className="more-info">
+                      <div key={i} className="more-info">
                         <p className="search-item">
                           {data.name}
                           <i>{data.ten_khoa_hoc}</i>
@@ -94,33 +98,34 @@ function Header(props) {
               )}
             </div>
           </form>
-          <i
-            id="search-btn"
-            className="fa-solid fa-magnifying-glass"
-            onClick={searchBtn}
-          ></i>
-          <a className="enhance" href="/">
+          <Link to={"/search"}>
+            <i
+              id="search-btn"
+              className="fa-solid fa-magnifying-glass"
+              onClick={searchBtn}
+            ></i>
+          </Link>
+
+          <Link className="enhance" to="/search">
             Nâng cao
-          </a>
+          </Link>
         </div>
         <div className="navLink">
-          <div className="head-link">
-            <a href="/">Bản tin</a>
-          </div>
-          <div className="head-link">
-            <a href="/">Giới thiệu</a>
-          </div>
-          <div className="head-link">
-            <a href="/">Tài liệu</a>
-          </div>
-          <div className="head-link">
-            <a className="contact" href="/">
-              Liên hệ
-            </a>
-          </div>
+          <Link to="/tintuc" className="head-link">
+            <p>Bản tin</p>
+          </Link>
+          <Link to="/hoso/gioithieu" className="head-link">
+            <p>Giới thiệu</p>
+          </Link>
+          <Link to="/hoso/tailieu" className="head-link">
+            <p>Tài liệu</p>
+          </Link>
+          <Link to="/hoso/lienhe" className="head-link">
+            <p className="contact">Liên hệ</p>
+          </Link>
         </div>
       </div>
     </div>
   );
-}
+});
 export default Header;

@@ -1,6 +1,7 @@
 .item-container{
     padding: 0.5rem;
     .item-content{
+        cursor: pointer;
         border: 1px solid #c9c9c9;
         border-radius: 0.5rem;
         height: 100%;
@@ -29,6 +30,10 @@
             .qr{
                 flex: 100%;
                 max-width: 7.2rem;
+                img{
+                    width: 100%;
+                    height: auto;
+                }
             }
         }
         .item-status{

@@ -1,8 +1,10 @@
+import React from "react";
 import "./footer.scss";
-import FooterItem from "../FooterItem";
-import { Images } from "../../Data/Api";
+import FooterItem from "../../components/FooterItem";
+import { Images } from "../../Constant/Api";
 
-function Footer() {
+const Footer = React.memo(function Footer() {
+  console.log("Footer loaded");
   let html = Images.map((item, index) => <FooterItem key={index} src={item} />);
   return (
     <div className="footer">
@@ -80,5 +82,5 @@ function Footer() {
       </div>
     </div>
   );
-}
+});
 export default Footer;

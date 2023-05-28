@@ -3,6 +3,9 @@
     padding: 1.2rem;
     border-right: 0.1rem solid #c9c9c9;
     flex: 100%;
+    .hidden{
+        display: none;
+    }
     .sideBar-title div{
         padding-right: 1rem;
         line-height: 2.6rem;
