@@ -60,9 +60,17 @@ const Header = React.memo(() => {
 
   return (
     <div className="header">
-      <Link to="/dangnhap" className="login">
-        <button id="login">Đăng nhập</button>
-      </Link>
+      {localStorage.getItem("user") ? (
+        <Link to="/hethong" className="login">
+          <button id="login">
+            {JSON.parse(localStorage.getItem("user")).username}
+          </button>
+        </Link>
+      ) : (
+        <Link to="/dangnhap" className="login">
+          <button id="login">Đăng nhập</button>
+        </Link>
+      )}
 
       <div className="header-container">
         <Link to="/" className="icon">

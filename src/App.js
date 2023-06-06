@@ -9,21 +9,29 @@ import ContactPage from "./pages/FilePage/ContactPage";
 import IntroducePage from "./pages/FilePage/IntroducePage";
 import DocumentPage from "./pages/FilePage/DocumentPage";
 import Species from "./pages/Species/Species";
-import React from "react";
 import LoginForm from "./pages/LogInForm";
+import ApiProvider from "./Context/ApiContext";
+import { ProtectedRoute } from "./layouts/ProtectedRoute";
+import Test from "./Test";
+import SystemPage from "./pages/SystemPage/Index";
 
 function App() {
   return (
     <div className="App">
       <Routes>
+        <Route path="/*" element={<ErrorPage />} />
+        <Route path="/test" element={<Test />} />
+
         <Route path="/dangnhap" element={<LoginForm />} />
         <Route
           path="/"
           element={
             <>
-              <Header />
-              <Outlet />
-              <Footer />
+              <ApiProvider>
+                <Header />
+                <Outlet />
+                <Footer />
+              </ApiProvider>
             </>
           }
         >
@@ -38,8 +46,21 @@ function App() {
             <Route path="lienhe" element={<ContactPage />} />
           </Route>
         </Route>
+        <Route path="" element={<ProtectedRoute />}>
+          <Route path="/hethong" element={<SystemPage />} />
+          <Route path="/nguoi-dung" element={<>123</>} />
+        </Route>
       </Routes>
     </div>
   );
 }
 export default App;
+
+const ErrorPage = () => {
+  return (
+    <div>
+      <h1>404</h1>
+      <h2>Not Found</h2>
+    </div>
+  );
+};

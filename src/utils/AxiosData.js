@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const getAxiosData = async (url, params = {}) => {
-  console.log((`${url}`, params));
+  // console.log((`${url}`, params));
   try {
     console.log("loading: true");
     const response = await axios.get(url, { params });
@@ -12,6 +12,6 @@ const getAxiosData = async (url, params = {}) => {
   } finally {
     console.log("done");
   }
-  console.log((`${url}`, params));
+  // console.log((`${url}`, params));
 };
 export default getAxiosData;

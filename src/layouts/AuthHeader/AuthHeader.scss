@@ -1,0 +1,141 @@
+.auth-head {
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  width: 100%;
+  align-items: center;
+  .left-auth-head {
+    display: flex;
+    cursor: pointer;
+    overflow: hidden;
+    .menu-btn {
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #fff;
+      color: #3b3b3b;
+      font-size: 2rem;
+      margin-right: 20px;
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+    a {
+      display: flex;
+      align-items: center;
+      color: #000;
+      text-decoration: none;
+      .home-icon {
+        width: 52px;
+        height: 100%;
+        img {
+          width: auto;
+          max-height: 52px;
+          height: 100%;
+          margin-right: 10px;
+        }
+      }
+      h1 {
+        flex: 90%;
+        margin: 0;
+        font-size: 1.8rem;
+        word-spacing: -2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .right-auth-head {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 100%;
+    cursor: pointer;
+    min-width: 203px;
+    position: relative;
+    .avarta-user {
+      width: 36px;
+      height: 36px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .modal-user {
+      padding: 20px 0 10px 0;
+      position: absolute;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      width: 240px;
+      box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.6);
+      border-radius: 5px;
+      left: -50px;
+      top: 70px;
+      display: none;
+      .role {
+        border-radius: 4px;
+        margin-top: 10px;
+        padding: 2px 5px;
+      }
+      .user-btn {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 20px 0 20px;
+        width: 100%;
+        .btn {
+          font-size: 1.4rem;
+        }
+        .info {
+          &:hover {
+            background-color: #c9c9c9;
+          }
+        }
+        .logout {
+          color: #db3d21;
+          &:hover {
+            background-color: #c9c9c9;
+          }
+        }
+      }
+      .role-avatar {
+        margin-bottom: 10px;
+      }
+    }
+    .modal-user.active {
+      display: flex;
+    }
+    &:hover {
+      background-color: #f3f3f3;
+    }
+    .role-avatar {
+      background-color: rgb(0, 137, 123);
+      height: 36px;
+      width: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+    .acc-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      height: 100%;
+      flex: 1;
+      margin-left: 12px;
+      display: flex;
+      align-items: center;
+      p {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+}

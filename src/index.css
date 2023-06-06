@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
 }
 body::-webkit-scrollbar{
   width: 5px;
@@ -22,6 +23,14 @@ code {
   margin: 0;
   box-sizing: border-box;
   font-family: "Roboto";
+  
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+ul,li{
+  list-style-type: none;
 }
 html{
   font-size: 62.5%;

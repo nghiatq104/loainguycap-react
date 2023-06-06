@@ -32,5 +32,6 @@ const API = {
   loai: endPoint + "species/",
   emptyImg: "/static/img/image4.5aecb9b5.png",
 };
+
 export default API;
 export { Images };

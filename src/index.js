@@ -4,15 +4,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import ApiProvider from "./Context/ApiContext";
+import AuthProvider from "./Context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
     <Router>
-      <ApiProvider>
+      <AuthProvider>
         <App />
-      </ApiProvider>
+      </AuthProvider>
     </Router>
   </>
 );

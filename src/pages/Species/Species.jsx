@@ -5,12 +5,17 @@ import getData from "../../utils/GetData";
 import API from "../../Constant/Api";
 
 const SpeciesRender = memo((props) => {
+  // const navigate = useNavigate();
   const [species, setSpecies] = useState([]);
   const dataApi = API.loai + props.id;
   useEffect(() => {
     async function getDataSpecies() {
-      const data = await getData(dataApi);
-      setSpecies(data);
+      try {
+        const data = await getData(dataApi);
+        setSpecies(data);
+      } catch (error) {
+        // history.push('/404')
+      }
     }
     getDataSpecies();
   }, [dataApi]);

@@ -1,121 +1,160 @@
-.login-form-container{
-    background: url("https://loainguycap.ceid.gov.vn/static/img/footerLogin.cf032540.svg") no-repeat center/cover  ;
-    height: 100vh;
-    .title-header{
-        display: flex;
-        align-items: center;
-        height: 8.8rem;
-        background-color: #da2a1c;
-        .img_contain{
-            width: 5.8rem;
-            height: 7rem;
-            margin-left: 2.4rem;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .title{
-            text-align: center;
-            flex: 100%;
-            h2{
-                margin: 0;
-                font-size: 2.2rem;
-                font-weight: 400;
-                color: #fff;
-            }
-        }
+.login-form-container {
+  background: url("https://loainguycap.ceid.gov.vn/static/img/footerLogin.cf032540.svg")
+    no-repeat center/cover;
+  height: 100vh;
+  .title-header {
+    display: flex;
+    align-items: center;
+    height: 8.8rem;
+    background-color: #da2a1c;
+    .img_contain {
+      width: 5.8rem;
+      height: 7rem;
+      margin-left: 2.4rem;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
-    .form-container{
-        max-width: 450px;
-        background-color: #fff;
-        margin: 20px auto;
-        padding: 2.4rem 1.6rem;
+    .title {
+      text-align: center;
+      flex: 100%;
+      h2 {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: #fff;
+      }
+    }
+  }
+  .form-container {
+    max-width: 450px;
+    background-color: #fff;
+    margin: 20px auto;
+    padding: 2.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0 0 10px gray;
+    h2 {
+      font-size: 24px;
+      padding: 16px;
+      font-weight: 900;
+    }
+    .img {
+      width: 9rem;
+      height: 11rem;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
+      .input-form {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        width: 100%;
         align-items: center;
-        border-radius: 20px;
-        box-shadow:0 0 10px gray;
-        h2{
-            font-size: 24px;
-            padding: 16px;
-            font-weight: 900;
+        padding: 10px 14px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 30px;
+        margin: 10px 0;
+        color: #ccc;
+        i {
+          width: 20px;
+          height: 20px;
         }
-        .img{
-            width: 9rem;
-            height: 11rem;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .form{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .eye {
+          border-radius: 50%;
+          &:hover {
+            color: #000;
+          }
+          i {
             width: 100%;
-            padding: 20px;
-            .input-form{
-                display: flex;
-                width: 100%;
-                align-items: center;
-                padding: 10px 14px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 30px;
-                margin: 10px 0;
-                color: #ccc;
-                i{
-                    width: 20px;
-                    height: 20px;
-                }
-                input{
-                    outline: none;
-                    border: none;
-                    flex: 100%;
-                    padding-left: 20px;
-                }
-                button{
-                    border: none;
-                    background: none;
-                    display: flex;
-                    align-items: center;
-                    color: #ccc;
-                    cursor: pointer;
-                }
-            }
-            .border-high-line{
-                border: 1px solid #da2a1c;
-            }
-            .submitBtn{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                background-color: #da2a1c;
-                color: #fff;
-                font-size: 14px;
-                font-weight: 500;
-                align-items: center;
-                border-radius: 20px;
-                border: none;
-                height: 40px;
-                margin-top: 20px;
-                cursor: pointer;
-            }
-            .forget-pass{
-                background:none;
-                border: none;
-                color: #da2a1c;
-                margin: 0;
-            }
-            .validator{
-                color: #da2a1c;
-                text-align: center;
-                width: 100%;
-                font-size: 16px;
-            }
+            height: 100%;
+          }
         }
-        
+        input {
+          outline: none;
+          border: none;
+          flex: 100%;
+          padding-left: 20px;
+        }
+        button {
+          border: none;
+          background: none;
+          display: flex;
+          align-items: center;
+          color: #ccc;
+          cursor: pointer;
+        }
+      }
+      .border-high-line {
+        border: 1px solid #da2a1c;
+      }
+      .btn {
+        position: relative;
+        width: 100%;
+        .submitBtn {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          background-color: #da2a1c;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 500;
+          align-items: center;
+          border-radius: 20px;
+          border: none;
+          height: 40px;
+          margin-top: 20px;
+          cursor: pointer;
+        }
+        .load-login {
+          position: absolute;
+          width: 100%;
+          max-width: 361px;
+          border-radius: 20px;
+          margin-top: 20px;
+          height: 40px;
+          background-color: #da2a1c;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 0.6;
+          cursor: default;
+          &::after {
+            content: "";
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #da2a1c;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            animation: loading 1.2s ease infinite;
+          }
+        }
+        .forget-pass {
+          background: none;
+          border: none;
+          color: #da2a1c;
+          margin: 0;
+        }
+      }
+
+      .validator {
+        color: #da2a1c;
+        text-align: center;
+        width: 100%;
+        font-size: 16px;
+      }
     }
+  }
 }
