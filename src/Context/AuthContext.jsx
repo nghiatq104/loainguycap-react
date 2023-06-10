@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
       // let user = JSON.stringify(response.user);
       setIsAuthenticated(true);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      console.log(response);
+      // console.log(response);
       return response;
     } catch (error) {
       Logout();
@@ -61,14 +61,22 @@ const AuthProvider = ({ children }) => {
   };
 
   // Hàm đăng xuất
-  const Logout = () => {
+  const Logout = async () => {
     // Xóa token từ localStorage hoặc trạng thái ứng dụng
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
+    try {
+      const response = await axios.post("http://wlp.howizbiz.com/api/me", {
+        token: _token,
+      });
+      console.log(response.data);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setToken(null);
 
-    // Đặt trạng thái đăng nhập thành false
-    setIsAuthenticated(false);
+      // Đặt trạng thái đăng nhập thành false
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -14,14 +14,14 @@ import ApiProvider from "./Context/ApiContext";
 import { ProtectedRoute } from "./layouts/ProtectedRoute";
 import Test from "./Test";
 import SystemPage from "./pages/SystemPage/Index";
+import ErrorPage404 from "./pages/ErrorPage/ErrorPage404";
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/*" element={<ErrorPage />} />
+        <Route path="/*" element={<ErrorPage404 />} />
         <Route path="/test" element={<Test />} />
-
         <Route path="/dangnhap" element={<LoginForm />} />
         <Route
           path="/"
@@ -55,12 +55,3 @@ function App() {
   );
 }
 export default App;
-
-const ErrorPage = () => {
-  return (
-    <div>
-      <h1>404</h1>
-      <h2>Not Found</h2>
-    </div>
-  );
-};

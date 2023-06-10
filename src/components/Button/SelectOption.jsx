@@ -1,32 +1,80 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const StSelectOption = styled.div`
   width: 100%;
-  /* height: 40px; */
-  padding: 20px;
+  padding: 0 12px;
   position: relative;
-  input {
-    width: 100%;
-    height: 40px;
-    font-size: 1.6rem;
-    padding: 0 10px;
+  min-height: 47px;
+  display: flex;
+  align-items: end;
+`;
+const StSpanIcon = styled.span`
+  width: 46px;
+  display: flex;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #00000099;
+  height: 35px;
+  cursor: pointer;
+  i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #00000099;
   }
-  p {
-    position: absolute;
-    top: 50%;
-    left: 30px;
-    transform: translateY(-50%);
+`;
+const StInputClick = styled.div`
+  border-bottom: 1px solid #00000099;
+  background-color: #f0f0f0;
+  width: 100%;
+  /* min-height: 46px; */
+  height: 35px;
+  overflow-y: scroll;
+  font-size: 1.6rem;
+  padding-top: 27px 10px 0 10px;
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
   }
 `;
 
+const StSpan = styled.span`
+  border-radius: 4px;
+  white-space: nowrap;
+  height: 20px;
+  margin: 5px;
+  color: #000;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
+
+const StLabel = styled.label`
+  font-size: 1.2rem;
+  position: absolute;
+  color: #00000099;
+  font-weight: 600;
+  top: -4px;
+  left: 22px;
+`;
 const StOption = styled.div`
   display: ${(props) => (props.isShow ? "flex" : "none")};
   flex-direction: column;
   position: absolute;
-  bottom: -25px;
-  width: calc(100% - 40px);
-  height: 40px;
+  padding: 8px 0;
+  top: 50px;
+  width: calc(100% - 24px);
+  height: 212px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 5px;
@@ -37,81 +85,91 @@ const StOption = styled.div`
   label {
     display: flex;
     align-items: center;
-    gap: 10px;
-  }
-  input {
-    width: 10px;
-    height: 10px;
-  }
-`;
-const StSpan = styled.span`
-  background-color: aqua;
-  border-radius: 4px;
-  height: 40px;
-  margin: 5px;
-  button {
-    outline: none;
-    border: none;
-    background: none;
-    width: 15px;
-    height: 15px;
+    height: 49px;
+    width: 100%;
+    padding: 0 16px;
+    cursor: pointer;
     &:hover {
-      background-color: #ccc;
-      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.3);
     }
   }
 `;
-const MultiSelectOptions = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [isShow, setIsShow] = useState(false);
+const StDivText = styled.div`
+  font-size: 1.3rem;
+  font-weight: 600;
+  width: 100%;
+  flex: 1;
+`;
+const StDivInput = styled.div`
+  height: 49px;
+  min-width: 49px;
+  display: flex;
+  align-items: center;
+  input {
+    width: 2rem;
+    cursor: pointer;
+  }
+`;
 
-  const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-    // Thêm các options khác nếu cần
-  ];
-  const Delete = (event) => {
-    const { value } = event.target;
-    setSelectedOptions(selectedOptions.filter((option) => option !== value));
-  };
+const MultiSelectOptions = (props) => {
+  const setArrRole = props.get_role;
+  const selectedOptionsProp = props.role
+    ? props.role.map((data) => {
+        return { id: data.id, name: data.name };
+      })
+    : [];
+  // lay data
+  const RoleOptions = props.data;
+  // console.log(RoleOptions);
+
+  const [selectedOptions, setSelectedOptions] = useState(selectedOptionsProp);
+  const [isShow, setIsShow] = useState(false);
+  // console.log(selectedOptions);
   const handleOptionChange = (event) => {
-    const { value, checked } = event.target;
+    const { value, checked, id } = event.target;
     if (checked) {
-      setSelectedOptions([...selectedOptions, value]);
+      setSelectedOptions([...selectedOptions, { name: value, id: id }]);
     } else {
-      setSelectedOptions(selectedOptions.filter((option) => option !== value));
+      setSelectedOptions(
+        selectedOptions.filter((option) => option.name !== value)
+      );
     }
   };
 
+  useEffect(() => {
+    setArrRole(selectedOptions);
+  }, [selectedOptions, setArrRole]);
+  // console.log(selectedOptions);
   return (
     <StSelectOption>
-      <input onClick={() => setIsShow(!isShow)} />
+      <StInputClick onClick={() => setIsShow(true)}>
+        {selectedOptions.map((data, i) => {
+          return <StSpan key={i}>{data.name}</StSpan>;
+        })}
+        <StLabel>Quyền</StLabel>
+      </StInputClick>
+      <StSpanIcon onClick={() => setIsShow(!isShow)}>
+        <i className="fa-solid fa-caret-down"></i>
+      </StSpanIcon>
       <StOption isShow={isShow}>
-        {options.map((option) => (
-          <label key={option.value}>
-            <input
-              type="checkbox"
-              value={option.value}
-              checked={selectedOptions.includes(option.value)}
-              onChange={handleOptionChange}
-            />
-            {option.label}
+        {RoleOptions.map((option) => (
+          <label htmlFor={option.id} key={option.id}>
+            <StDivInput>
+              <input
+                type="checkbox"
+                key={option.id}
+                value={option.name}
+                id={option.id}
+                checked={selectedOptions.some(
+                  (role) => role && role.name === option.name
+                )}
+                onChange={handleOptionChange}
+              />
+            </StDivInput>
+            <StDivText>{option.name}</StDivText>
           </label>
         ))}
       </StOption>
-      <p>
-        {selectedOptions.map((data, i) => {
-          return (
-            <StSpan key={i}>
-              {data}
-              <button value={data} onClick={(e) => Delete(e)}>
-                x
-              </button>
-            </StSpan>
-          );
-        })}
-      </p>
     </StSelectOption>
   );
 };

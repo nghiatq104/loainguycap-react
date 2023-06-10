@@ -1,12 +1,11 @@
 import { memo, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Btn from "../Button/Btn";
 import { useForm } from "react-hook-form";
-// import { useContext } from "react";
-// import { AdminContext } from "../../Context/AdminPageContext";
 import axios from "axios";
 import { useContext } from "react";
 import { AdminContext } from "../../Context/AdminPageContext";
+import MultiSelectOptions from "../Button/SelectOption";
 
 const StyleForm = styled.form`
   flex: 1;
@@ -47,7 +46,7 @@ const Footer = styled.div`
 
 const InputContainer = styled.div`
   width: 100%;
-  height: 86px;
+  min-height: 86px;
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
@@ -66,6 +65,21 @@ const InputText = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  ${(props) =>
+    props.isActive &&
+    css`
+      &:after {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        left: 0;
+      }
+      input {
+        color: rgba(0, 0, 0, 0.2);
+      }
+    `};
   input {
     outline: none;
     padding: 27px 10px 0 10px;
@@ -98,7 +112,7 @@ const InputText = styled.div`
     position: absolute;
     padding: 0 12px;
     left: 10px;
-    top: 34px;
+    top: 30px;
     pointer-events: none;
     font-size: 1.6rem;
     font-weight: 500;
@@ -106,7 +120,11 @@ const InputText = styled.div`
     transition: all 0.3s ease-in-out;
   }
 `;
-
+const StSpan = styled.span`
+  font-size: 1.2rem;
+  color: red;
+  padding: 0;
+`;
 const DropdownInt = styled.div`
   width: 100%;
   height: 14px;
@@ -116,16 +134,17 @@ const DropdownInt = styled.div`
 
 let token = localStorage.getItem("token");
 
-const EditForm = memo((props) => {
-  const { setIsAdd } = useContext(AdminContext);
+const EditForm = memo(() => {
+  const [isLoad, setIsLoad] = useState(false);
+
+  const { setIsAdd, userId } = useContext(AdminContext);
+  const [dataErrors, setDataErrors] = useState([]);
+  // idRole
+  const [selectedRoles, setSelectedRoles] = useState([]);
   // roles
   const [roles, setRoles] = useState([]);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const { register, handleSubmit } = useForm();
+  // console.log(userId);
   useEffect(() => {
     const getRoles = async () => {
       const config = {
@@ -138,23 +157,45 @@ const EditForm = memo((props) => {
         "http://wlp.howizbiz.com/api/roles",
         config
       );
+
       setRoles(respone.data);
+      const userRoles = userId.roles.map((role) => {
+        return { id: role.id, name: role.name };
+      });
+      setSelectedRoles(userRoles);
     };
     getRoles();
-  }, []);
-  console.log(roles);
-
+  }, [userId]);
+  console.log(userId);
   // Edit user
-
+  console.log(selectedRoles);
   const onSubmit = (data) => {
+    setIsLoad(true);
     const user = {
-      name: data.name,
-      username: data.username,
-      email: data.email,
+      username: userId.username,
+      name: data.name ? data.name : userId.name,
+      email: data.email ? data.email : userId.email,
       mobile: data.mobile ? data.mobile : "",
-      roles: [data.roles],
+      role_ids: selectedRoles.map((role) => role.id),
+      id: userId.id,
+      khubaoton: data.khubaoton ? data.khubaoton : userId.khubaoton,
+      provinces: data.provinces ? data.provinces : userId.provinces,
     };
-    console.log(user);
+    console.log(typeof user.id);
+    try {
+      const response = axios.put(
+        `http://wlp.howizbiz.com/api/users/${userId.id}`,
+        user
+      );
+      console.log(response.data);
+      alert("Sửa thành công");
+      setIsAdd(false);
+    } catch (error) {
+      alert("Sửa thất bại");
+      setDataErrors(error.response.data.errors);
+    } finally {
+      setIsLoad(false);
+    }
   };
   return (
     <StyleForm action="" onSubmit={handleSubmit(onSubmit)}>
@@ -162,55 +203,59 @@ const EditForm = memo((props) => {
         <InputContainer>
           <InputText>
             <input
+              defaultValue={userId.name}
               name="name"
               type="text"
               required
-              {...register("name", { required: true })}
+              {...register("name")}
             />
+
             <label>Tên hiển thị</label>
           </InputText>
           <DropdownInt>
-            {errors.name && <span>Trường này không được để trống</span>}
+            {dataErrors.name && <StSpan>{dataErrors.name}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
-          <InputText>
+          <InputText isActive={true}>
             <input
               name="username"
               type="text"
+              defaultValue={userId.username}
               required
-              {...register("username", { required: true })}
-            />
+              {...register("username")}
+            />{" "}
             <label>Tên đăng nhập</label>
           </InputText>
           <DropdownInt>
-            {errors.name && <span>Trường này không được để trống</span>}
+            {dataErrors.username && <StSpan>{dataErrors.username}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
           <InputText>
             <input
+              defaultValue={userId.email}
               type="email"
               name="email"
               required
-              {...register("email", { required: true })}
+              {...register("email")}
             />
+
             <label>Email</label>
           </InputText>
           <DropdownInt>
-            {errors.name && <span>Trường này không được để trống</span>}
+            {dataErrors.email && <StSpan>{dataErrors.email}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
           <InputText>
             <input
+              defaultValue={userId.mobile}
               name="mobile"
               type="text"
-              {...register("mobile", {
-                required: false,
-                pattern: /^\d{9}$/,
-              })}
+              {...register("mobile")}
             />
+
             <label>Điện thoại</label>
           </InputText>
 
@@ -219,23 +264,18 @@ const EditForm = memo((props) => {
               Trường có thể để trống
             </span>
 
-            {errors.phone && errors.phone.type === "pattern" && (
-              <span>Số điện thoại phải có ít nhất 9 số</span>
-            )}
+            {dataErrors.mobile && <StSpan>{dataErrors.mobile}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
-          <InputText>
-            <input
-              name="roles"
-              required
-              {...register("roles", { required: true })}
-            />
-            <label>Quyền</label>
-          </InputText>
+          <MultiSelectOptions
+            role={userId.roles}
+            data={roles}
+            get_role={setSelectedRoles}
+          />
 
           <DropdownInt>
-            {errors.name && <span>Trường này không được để trống</span>}
+            {dataErrors.role_ids && <StSpan>{dataErrors.role_ids}</StSpan>}
           </DropdownInt>
         </InputContainer>
       </Body>
@@ -253,6 +293,7 @@ const EditForm = memo((props) => {
             title="Cập nhật"
             icon="fa-solid fa-pencil"
             iscolor={true}
+            isloading={isLoad}
           />
         </div>
       </Footer>

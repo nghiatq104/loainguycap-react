@@ -1,19 +1,79 @@
 import { memo, useContext, useEffect, useState, useCallback } from "react";
 import "./SystemPage.scss";
-import { authContext } from "../../Context/AuthContext";
 // import getAxiosData from "../../utils/AxiosData";
 import getData from "../../utils/GetData";
 import BtnPagination from "../../components/BtnPagination";
 import FTButton from "../../components/Button/FeatureBtn";
 import useDebounce from "../../hook/Debounce";
 import { AdminContext } from "../../Context/AdminPageContext";
+import LineLoading from "../../components/Loading/LineLoading";
+import styled, { css } from "styled-components";
+import SortBtn from "../../components/Button/SortBtn";
+
+const MaintContainer = styled.div`
+  padding: 20px 32px;
+  flex: 1;
+  overflow-y: scroll;
+  max-height: calc(100vh - 93px);
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #5f5f5f;
+  }
+  transition: all 0.5s ease;
+  @media (min-width: 651px) {
+    ${(props) =>
+      props.isSidebar &&
+      css`
+        margin-left: 50px;
+      `};
+    ${(props) =>
+      !props.isSidebar &&
+      css`
+        margin-left: 300px;
+      `};
+  }
+  @media (max-width: 650px) {
+    width: 100%;
+    margin-left: 0;
+  }
+`;
+
+const ListUser = styled.div`
+  @media (min-width: 651px) {
+    ${(props) =>
+      props.isSidebar &&
+      css`
+        width: calc(100vw - 114px);
+        max-width: calc(1600px - 82px);
+      `};
+    ${(props) =>
+      !props.isSidebar &&
+      css`
+        width: calc(100vw - 364px);
+        max-width: calc(1600px - 332px);
+      `};
+  }
+  @media (max-width: 650px) {
+    width: calc(100vw - 64px);
+  }
+`;
+const LiTh = styled.li`
+  display: flex;
+  align-items: center;
+`;
 
 // let token = localStorage.getItem("token");
 const SystemPage = memo(() => {
   // context modal
-  const { setIsAdd, setUserId, setModal } = useContext(AdminContext);
-  // context auth
-  const { config } = useContext(authContext);
+  const { setIsAdd, setUserId, setModal, isAdd, isSidebar } =
+    useContext(AdminContext);
+  // loading
+  const [loading, setLoading] = useState(false);
+
+  // data user
   const [dataUser, setDataUser] = useState([]);
   // paging
   const [page, setPage] = useState(1);
@@ -21,33 +81,37 @@ const SystemPage = memo(() => {
   // active btn
   const [currentBtn, setCurrentBtn] = useState(1);
   const [decreaseBtn, setDecreaseBtn] = useState(1);
-  // lay ngay
-  const [date, setDate] = useState();
   // search
   const [search, setSearch] = useState("");
   // filter theo inactive
   const [inActive, setInAtive] = useState("");
   //  filter theo role
   const [filRole, setFilrole] = useState("");
+  // sortby
+  const [sortBy, setSortBy] = useState("");
 
   // url
   let url = "http://wlp.howizbiz.com/api/users";
+  let pageParam = `?paginate=true&page=${page}&perpage=${perpage}`;
   let urlUser =
     url +
-    `?paginate=true&page=${page}&perpage=
-    ${perpage}&with=roles,createdBy,provinces&search=${search}${inActive}${filRole}`;
+    pageParam +
+    `&with=roles,createdBy,provinces&search=${search}${inActive}${filRole}${sortBy}`;
 
-  // console.log(config);
   useEffect(() => {
     const getUser = async () => {
-      const res = await getData(urlUser);
-      setDataUser(res);
-      // console.log(res);
+      setLoading(true);
+      try {
+        const res = await getData(urlUser);
+        setDataUser(res);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
     getUser();
-  }, [urlUser]);
-
-  // Detele
+  }, [urlUser, isAdd]);
 
   // đổi itemPerpage
   const changePerpage = (e) => {
@@ -72,16 +136,22 @@ const SystemPage = memo(() => {
       setDecreaseBtn(page + value);
     }
   };
-
   // search name and phoneNumber
   const searchIntput = useDebounce((e) => {
     e.target.value !== "" ? setSearch(e.target.value) : setSearch("");
+    setPage(1);
+    setCurrentBtn(1);
+    setDecreaseBtn(1);
   }, 500);
 
   // filter theo trangj thai
-  const filterInActive = (e) => {
-    setInAtive(e.target.value);
+  const filterInActive = (e, callback) => {
+    callback(e);
+    setPage(1);
+    setCurrentBtn(1);
+    setDecreaseBtn(1);
   };
+
   let Btn = [];
   let totalPage =
     dataUser.length !== 0
@@ -99,10 +169,8 @@ const SystemPage = memo(() => {
       />
     );
   }
-  console.log(dataUser);
-  // let data = dataUser.list;
   return (
-    <div className="main-container">
+    <MaintContainer isSidebar={isSidebar}>
       <div className="user-title">
         <div className="icon-title">
           <i className="fa-solid fa-user"></i>
@@ -133,7 +201,10 @@ const SystemPage = memo(() => {
       <div className="filter-nav">
         <div className="inputbf">
           <div className="filter">
-            <select className="select" onChange={(e) => filterInActive(e)}>
+            <select
+              className="select"
+              onChange={(e) => filterInActive(e.target.value, setInAtive)}
+            >
               <option value={""}>Toàn bộ</option>
               <option value={"&inactive=false"}>Hoạt động</option>
               <option value={"&inactive=true"}>Vô hiệu</option>
@@ -146,7 +217,7 @@ const SystemPage = memo(() => {
             <select
               className="select"
               required
-              onChange={(e) => setFilrole(e.target.value)}
+              onChange={(e) => filterInActive(e.target.value, setFilrole)}
             >
               <option value={""}></option>
               <option value={"&role_id=1"}>Quản trị hệ thống</option>
@@ -160,12 +231,11 @@ const SystemPage = memo(() => {
             <label>Quyền</label>
           </div>
         </div>
-
         <div className="inputbf">
           <div className="filter">
             <input
               type="date"
-              onChange={(e) => setDate(e.target.value)}
+              // onChange={(e) => setDate(e.target.value)}
               placeholder=" "
               required
             />
@@ -176,7 +246,7 @@ const SystemPage = memo(() => {
           <div className="filter">
             <input
               type="date"
-              onChange={(e) => setDate(e.target.value)}
+              // onChange={(e) => setDate(e.target.value)}
               placeholder=" "
               required
             />
@@ -184,18 +254,36 @@ const SystemPage = memo(() => {
           </div>
         </div>
       </div>
+      <LineLoading isload={loading} />
+
       <div className="table-user">
-        <div className="list-user">
+        <ListUser isSidebar={isSidebar} className="list-user">
           <ul className="col-name">
-            <li>Tên hiển thị</li>
-            <li>Tên đăng nhập</li>
+            <LiTh>
+              Tên hiển thị
+              <SortBtn value="name" sortBy={sortBy} setSortBy={setSortBy} />
+            </LiTh>
+            <LiTh>
+              Tên đăng nhập
+              <SortBtn value="username" sortBy={sortBy} setSortBy={setSortBy} />
+            </LiTh>
             <li>Số điện thoại</li>
-            <li className="small">Trạng thái</li>
+            <LiTh className="small">
+              Trạng thái
+              <SortBtn value="inactive" sortBy={sortBy} setSortBy={setSortBy} />
+            </LiTh>
             <li className="role-item">Quyền</li>
-            <li>Ngày tạo</li>
+            <LiTh>
+              Ngày tạo
+              <SortBtn
+                value="created_at"
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+              />
+            </LiTh>
             <li>Hành động</li>
           </ul>
-          {dataUser.length !== 0 ? (
+          {dataUser.length !== 0 &&
             dataUser.list.map((data, i) => {
               return (
                 <ul key={i}>
@@ -227,58 +315,78 @@ const SystemPage = memo(() => {
                     })}
                   </li>
                   <li>{data["created_at"].split(" ")[0]}</li>
-                  <li className="d-flex action">
-                    <FTButton key={0}>
-                      <i
-                        style={{
-                          color: "rgba(0,0,0,0.54)",
-                        }}
-                        className="fa-solid fa-unlock-keyhole"
-                      ></i>
-                    </FTButton>
-                    <FTButton
-                      key={1}
-                      value={data.id}
-                      click={() => {
-                        setIsAdd(true);
-                        setUserId(data.id);
-                        setModal("update");
-                      }}
-                    >
-                      <i
-                        style={{
-                          color: "#da2a1c",
-                        }}
-                        className="fa-solid fa-pen"
-                      ></i>
-                    </FTButton>
-                    <FTButton
-                      key={2}
-                      value={data.id}
-                      click={() => {
-                        setIsAdd(true);
-                        setUserId(data.id);
-                        setModal("delete");
-                      }}
-                    >
-                      <i
-                        style={{
-                          color: "#da2a1c",
-                        }}
-                        className="fa-solid fa-trash-can"
-                      ></i>
-                    </FTButton>
-                  </li>
+                  {data.roles.some((role) => role.id === 2 || role.id === 1) ? (
+                    <li className="d-flex action">
+                      <FTButton unclick={true}>
+                        <i
+                          style={{ color: "rgba(0,0,0,0.3)" }}
+                          className="fa-solid fa-unlock-keyhole"
+                        ></i>
+                      </FTButton>
+                      <FTButton unclick={true}>
+                        <i
+                          style={{ color: "rgba(0,0,0,0.3)" }}
+                          className="fa-solid fa-pen"
+                        ></i>
+                      </FTButton>
+                      <FTButton unclick={true}>
+                        <i
+                          style={{ color: "rgba(0,0,0,0.3)" }}
+                          className="fa-solid fa-trash-can"
+                        ></i>
+                      </FTButton>
+                    </li>
+                  ) : (
+                    <>
+                      <li className="d-flex action">
+                        <FTButton key={0}>
+                          <i
+                            style={{
+                              color: `rgba(0,0,0,0.54)`,
+                            }}
+                            className="fa-solid fa-unlock-keyhole"
+                          ></i>
+                        </FTButton>
+                        <FTButton
+                          key={1}
+                          click={() => {
+                            setIsAdd(true);
+                            setUserId(data);
+                            setModal("update");
+                          }}
+                        >
+                          <i
+                            style={{
+                              color: "#da2a1c",
+                            }}
+                            className="fa-solid fa-pen"
+                          ></i>
+                        </FTButton>
+                        <FTButton
+                          key={2}
+                          click={() => {
+                            setIsAdd(true);
+                            setUserId(data);
+                            setModal("delete");
+                          }}
+                        >
+                          <i
+                            style={{
+                              color: "#da2a1c",
+                            }}
+                            className="fa-solid fa-trash-can"
+                          ></i>
+                        </FTButton>
+                      </li>
+                    </>
+                  )}
                 </ul>
               );
-            })
-          ) : (
-            <ul></ul>
-          )}
-        </div>
+            })}
+        </ListUser>
         <div className="pagin d-flex">
           <div className="perpage-total">
-            {dataUser.length !== 0 ? (
+            {dataUser.length !== 0 && (
               <>
                 {dataUser.pagination.itemsPerPage * (page - 1) + 1}-
                 {dataUser.pagination.itemsPerPage * page >=
@@ -287,8 +395,6 @@ const SystemPage = memo(() => {
                   : dataUser.pagination.itemsPerPage * page}
                 /{dataUser.pagination.total}
               </>
-            ) : (
-              <></>
             )}
           </div>
 
@@ -321,7 +427,7 @@ const SystemPage = memo(() => {
           </div>
         </div>
       </div>
-    </div>
+    </MaintContainer>
   );
 });
 

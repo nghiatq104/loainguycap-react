@@ -1,8 +1,8 @@
 import { memo } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 const StBtnContainer = styled.div`
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   margin: 0 8px;
   display: flex;
@@ -22,6 +22,7 @@ const StButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   display: flex;
+  cursor: pointer;
   align-items: center;
   white-space: nowrap;
   justify-content: center;
@@ -45,34 +46,40 @@ const loading = keyframes`
     }
 `;
 const StLoading = styled.div`
-  ${(props) =>
-    props.isloading
-      ? `width: 100% !important;
-  height: 100%;
   position: absolute;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &::after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.8);
-    border-radius: 50%;
-    border-right: 2px solid #fff;
-    animation: ${loading} 0.5s ease infinite;
-  }`
-      : ""};
-`;
+  ${(props) =>
+    props.isloading &&
+    css`
+      width: 100% !important;
+      height: 100%;
 
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      &::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        border-right: 2px solid #fff;
+        animation: ${loading} 0.5s ease infinite;
+      }
+    `}
+  ${(props) =>
+    !props.isloading &&
+    css`
+      z-index: -1;
+    `};
+`;
 const Btn = memo((props) => {
   const handleClick = props.handleClick;
   return (
     <StBtnContainer>
       <StButton
-        isloading
         type={props.type}
         iscolor={props.iscolor}
         onClick={() => {
@@ -82,7 +89,7 @@ const Btn = memo((props) => {
         {props.icon ? <i className={props.icon}></i> : <></>}
         {props.title}
       </StButton>
-      <StLoading></StLoading>
+      <StLoading isloading={props.isloading}></StLoading>
     </StBtnContainer>
   );
 });

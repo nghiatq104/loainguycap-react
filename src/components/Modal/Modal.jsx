@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { AdminContext } from "../../Context/AdminPageContext";
 import Form from "../Form/AddForm";
 import EditForm from "../Form/EditForm";
+import DeletePopsUp from "../Form/DeletePopUp";
 
 const ModalContainer = styled.div`
   width: 100vw;
@@ -58,21 +59,29 @@ const Header = styled.div`
     }
   }
 `;
-const Modal = memo((props) => {
+const Modal = memo(() => {
   const { isAdd, setIsAdd, modal } = useContext(AdminContext);
 
   return (
     <ModalContainer show={isAdd}>
       <StyleModal>
         <Header>
-          <h2>{props.title}</h2>
+          <h2>
+            {
+              {
+                create: "Thêm mới người dùng",
+                update: "Cập nhật người dùng",
+                delete: "Bạn có chắc không?",
+              }[modal]
+            }
+          </h2>
           <button onClick={() => setIsAdd(false)}>X</button>
         </Header>
         {
           {
             create: <Form />,
             update: <EditForm />,
-            delete: <>Ban co chac chan muon xoa</>,
+            delete: <DeletePopsUp />,
           }[modal]
         }
       </StyleModal>

@@ -4,8 +4,8 @@ import Btn from "../Button/Btn";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AdminContext } from "../../Context/AdminPageContext";
-import useDebounce from "../../hook/Debounce";
 import axios from "axios";
+import MultiSelectOptions from "../Button/SelectOption";
 
 const StyleForm = styled.form`
   flex: 1;
@@ -46,15 +46,15 @@ const Footer = styled.div`
 
 const InputContainer = styled.div`
   width: 100%;
-  height: 86px;
+  min-height: 86px;
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
-  span {
-    font-size: 1.2rem;
-    color: red;
-    padding: 0;
-  }
+`;
+const StSpan = styled.span`
+  font-size: 1.2rem;
+  color: red;
+  padding: 0;
 `;
 
 const InputText = styled.div`
@@ -168,6 +168,10 @@ const Form = memo(() => {
   // setloading
   const [isLoad, setIsLoad] = useState(false);
   const { setIsAdd } = useContext(AdminContext);
+  const [dataErrors, setDataErrors] = useState({});
+  // idRole
+  const [arrRole, setArrRole] = useState([]);
+
   // roles
   const [roles, setRoles] = useState([]);
   // show pass
@@ -199,7 +203,6 @@ const Form = memo(() => {
     getRoles();
   }, [url]);
   // console.log(roles);
-  const password = watch("password");
   // function show pass
   const showPassword = (e, showPass, setShowPass, setShow) => {
     e.preventDefault();
@@ -221,8 +224,12 @@ const Form = memo(() => {
       email: data.email,
       mobile: data.mobile ? data.mobile : "",
       password: data.password,
-      password_confirmation: data.password,
-      role_ids: [2],
+      password_confirmation: data.passwordConfirm,
+      role_ids: arrRole && arrRole.map((role) => role.id),
+      // role_ids: [1, 2, 3, 4, 5],
+
+      khubaoton: data.khubaoton ? data.khubaoton : [],
+      provinces: data.provinces ? data.provinces : [],
     };
     // console.log(datauser);
 
@@ -233,82 +240,60 @@ const Form = memo(() => {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert("Thêm mới thành công");
       setIsAdd(false);
+      alert("Thêm mới thành công");
     } catch (error) {
-      const errors = error.response.data.errors;
-      console.log(errors);
+      const Errors = error.response.data.errors;
+      setDataErrors(Errors);
+      alert("Khởi tạo thất bại");
     } finally {
       setIsLoad(false);
     }
   };
+  const password = watch("password");
 
   return (
     <StyleForm action="" onSubmit={handleSubmit(onSubmit)}>
       <Body>
         <InputContainer>
           <InputText>
-            <input
-              name="name"
-              type="text"
-              required
-              {...register("name", { required: true })}
-            />
+            <input name="name" type="text" {...register("name")} />
             <label>Tên hiển thị</label>
           </InputText>
           <DropdownInt>
-            {errors.name && <span>Trường này không được để trống</span>}
+            {dataErrors.name && <StSpan>{dataErrors.name}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
           <InputText>
-            <input
-              name="username"
-              type="text"
-              required
-              {...register("username", { required: true })}
-            />
+            <input name="username" type="text" {...register("username")} />
             <label>Tên đăng nhập</label>
           </InputText>
           <DropdownInt>
-            {errors.username && <span>Trường này không được để trống</span>}
+            {dataErrors.username && <StSpan>{dataErrors.username}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
           <InputText>
-            <input
-              type="email"
-              name="email"
-              required
-              {...register("email", { required: true })}
-            />
+            <input type="email" name="email" {...register("email")} />
             <label>Email</label>
           </InputText>
           <DropdownInt>
-            {errors.email && <span>Trường này không được để trống</span>}
+            {dataErrors.email && <StSpan>{dataErrors.email}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
           <InputText>
-            <input
-              name="mobile"
-              type="text"
-              {...register("mobile", {
-                required: false,
-                pattern: /^\d{9}$/,
-              })}
-            />
+            <input name="mobile" type="text" {...register("mobile")} />
             <label>Điện thoại</label>
           </InputText>
 
           <DropdownInt>
-            <span style={{ color: "rgba(0,0,0,0.7)" }}>
+            <StSpan style={{ color: "rgba(0,0,0,0.7)" }}>
               Trường có thể để trống
-            </span>
+            </StSpan>
 
-            {errors.mobile && errors.mobile.type === "pattern" && (
-              <span>Số điện thoại phải có ít nhất 9 số</span>
-            )}
+            {dataErrors.mobile && <StSpan>{dataErrors.mobile}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
@@ -317,8 +302,7 @@ const Form = memo(() => {
               <input
                 name="password"
                 type={showPass1}
-                required
-                {...register("password", { required: true, minLength: 8 })}
+                {...register("password")}
               />
               <label>Mật khẩu</label>
               <button
@@ -331,14 +315,8 @@ const Form = memo(() => {
               </button>
             </InputWithFeature>
           </InputText>
-
           <DropdownInt>
-            {errors.password && errors.password.type === "required" && (
-              <span>Trường này không được để trống</span>
-            )}
-            {errors.password && errors.password.type === "minLength" && (
-              <span>Mật khẩu phải có ít nhất 8 ký tự</span>
-            )}
+            {dataErrors.password && <StSpan>{dataErrors.password}</StSpan>}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
@@ -347,11 +325,11 @@ const Form = memo(() => {
               <input
                 name="passwordConfirm"
                 type={showPass2}
-                required
                 {...register("passwordConfirm", {
                   required: true,
                   validate: (value) =>
-                    value === password || "Mật khẩu chưa trùng khớp",
+                    value === password ||
+                    "Mật khẩu xác nhận phải giống mật khẩu đã nhập",
                 })}
               />
               <label>Mật khẩu xác nhận</label>
@@ -367,27 +345,20 @@ const Form = memo(() => {
           </InputText>
 
           <DropdownInt>
-            {errors.passwordConfirm &&
-              errors.passwordConfirm.type === "required" && (
-                <span>Trường này không được để trống</span>
-              )}
-            {errors.passwordConfirm && errors.passwordConfirm.message && (
-              <span>{errors.passwordConfirm.message}</span>
+            {errors.passwordConfirm && (
+              <StSpan>{errors.passwordConfirm.message}</StSpan>
             )}
           </DropdownInt>
         </InputContainer>
         <InputContainer>
-          <InputText>
-            <input
-              name="roles"
-              required
-              {...register("roles", { required: true })}
-            />
-            <label>Quyền</label>
-          </InputText>
+          <MultiSelectOptions
+            role={arrRole}
+            data={roles}
+            get_role={setArrRole}
+          />
 
           <DropdownInt>
-            {errors.roles && <span>Trường này không được để trống</span>}
+            {dataErrors.role_ids && <StSpan>{dataErrors.role_ids}</StSpan>}
           </DropdownInt>
         </InputContainer>
       </Body>
@@ -404,7 +375,7 @@ const Form = memo(() => {
             type="submit"
             title="+ Thêm mới"
             iscolor={true}
-            // isloading={isLoad}
+            isloading={isLoad}
           />
         </div>
       </Footer>

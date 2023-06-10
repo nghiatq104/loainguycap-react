@@ -3,8 +3,10 @@ import "./AuthHeader.scss";
 import { Link } from "react-router-dom";
 import { authContext } from "../../Context/AuthContext";
 import MenuBtn from "../../components/Button/MenuBtn/MenuBtn";
+import { AdminContext } from "../../Context/AdminPageContext";
 
-const AuthHeader = memo((props) => {
+const AuthHeader = memo(() => {
+  const { isSidebar, setIsSidebar } = useContext(AdminContext);
   const { Logout } = useContext(authContext);
   const [hiddenModal, setHiddenModal] = useState(false);
   const [active, setActive] = useState("");
@@ -32,7 +34,7 @@ const AuthHeader = memo((props) => {
     <>
       <div className="auth-head">
         <div className="left-auth-head">
-          <MenuBtn onClick={props.onClick} />
+          <MenuBtn eventClick={() => setIsSidebar(!isSidebar)} />
           <Link to="/">
             <div className="home-icon">
               <img src="../images/logoColor.png" alt="" />

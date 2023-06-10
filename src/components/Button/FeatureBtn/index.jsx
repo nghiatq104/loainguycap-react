@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const StyleFTButton = styled.button`
   width: 20px;
@@ -11,6 +11,12 @@ const StyleFTButton = styled.button`
   background: none;
   border: none;
   outline: none;
+  /* unclick */
+  ${(props) =>
+    props.unclick &&
+    css`
+      cursor: default !important;
+    `}
 `;
 const StyleDivBtn = styled.div`
   width: 36px;
@@ -19,14 +25,27 @@ const StyleDivBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover {
-    background-color: #ccc;
-  }
+  /* click */
+  ${(props) =>
+    !props.unclick &&
+    css`
+      &:hover {
+        background-color: #ccc;
+      }
+    `}
+  /* unclick */
+  ${(props) =>
+    props.unclick &&
+    css`
+      cursor: default;
+    `}
 `;
 const FTButton = memo((props) => {
   return (
-    <StyleDivBtn>
-      <StyleFTButton onClick={props.click}>{props.children}</StyleFTButton>
+    <StyleDivBtn unclick={props.unclick}>
+      <StyleFTButton unclick={props.unclick} onClick={props.click}>
+        {props.children}
+      </StyleFTButton>
     </StyleDivBtn>
   );
 });

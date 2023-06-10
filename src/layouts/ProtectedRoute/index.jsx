@@ -1,16 +1,58 @@
 import { useContext } from "react";
 import { authContext } from "../../Context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
-// import axios from "axios";
-import "./ProtectedRoute.scss";
 import AuthHeader from "../AuthHeader";
 import AuthSideBar from "../AuthSideBar";
 import Modal from "../../components/Modal/Modal";
 import AdminProvider from "../../Context/AdminPageContext";
+import styled from "styled-components";
+import SmScSideBar from "../AuthSideBar/SmScSideBar";
+
+const AuContainer = styled.div`
+  width: 100vw;
+  margin-top: 60px;
+  margin: 0 auto;
+  max-width: 1600px;
+`;
+
+// HEADER
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  max-width: 1600px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+`;
+
+// CONTENT
+const MainContainer = styled.div`
+  width: 100%;
+  margin-top: 60px;
+  display: flex;
+`;
+
+// FOOTER
+const Footer = styled.div`
+  width: 100%;
+  max-width: 1600px;
+  justify-content: space-between;
+  align-items: center;
+  height: 33px;
+  font-size: 1.4rem;
+  padding: 6px 16px;
+  background-color: #c7c7c5;
+  font-weight: 800;
+  color: #757575;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  p {
+    margin: 0;
+  }
+`;
 
 export const ProtectedRoute = () => {
-  // const navigate = useNavigate();
-
   const { isAuthenticated, isChecking } = useContext(authContext);
   if (isChecking) {
     // user is not authenticated
@@ -22,24 +64,29 @@ export const ProtectedRoute = () => {
   }
 
   return (
-    <div className="auth-container">
-      <div className="header-auth">
-        <AuthHeader />
-      </div>
-      <AdminProvider>
-        <div className="d-flex contain">
+    <AdminProvider>
+      <SmScSideBar />
+      <AuContainer>
+        {/* header */}
+        <Header>
+          <AuthHeader />
+        </Header>
+
+        {/* Main content */}
+        <MainContainer>
           <Modal />
           <AuthSideBar />
           <Outlet />
-        </div>
-      </AdminProvider>
+        </MainContainer>
 
-      <div className="auth-footer d-flex">
-        <div>
-          <i className="fa-regular fa-copyright"></i> 2021
-        </div>
-        <p>Phiên bản 1.0.0</p>
-      </div>
-    </div>
+        {/* Footer */}
+        <Footer>
+          <div>
+            <i className="fa-regular fa-copyright"></i> 2021
+          </div>
+          <p>Phiên bản 1.0.0</p>
+        </Footer>
+      </AuContainer>
+    </AdminProvider>
   );
 };
