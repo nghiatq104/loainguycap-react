@@ -6,7 +6,7 @@ import { AdminContext } from "../../Context/AdminPageContext";
 
 const Container = styled.div`
   position: fixed;
-  z-index: 999;
+  z-index: 10;
   top: 0;
   width: 100vw;
   height: 100vh;
@@ -32,6 +32,8 @@ const Container = styled.div`
 const SideMenu = styled.div`
   width: 100%;
   height: 50%;
+  position: fixed;
+  z-index: 11;
   overflow-y: scroll;
   background-color: #fff;
   &::-webkit-scrollbar {
@@ -69,6 +71,7 @@ const SmScSideBar = () => {
                 icon={item.icon}
                 title={item.title}
                 dropBtn={item.dropBtn}
+                link={item.link}
               />
             );
           })}

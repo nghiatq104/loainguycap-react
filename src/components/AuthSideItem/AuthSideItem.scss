@@ -5,6 +5,17 @@
   &:hover {
     background-color: #d8d7d7;
   }
+  .active{
+    background-color: #d8d7d7;
+  }
+  a{
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    &:hover{
+      color: #000;
+    }
+  }
   cursor: pointer;
   .item-icon {
     font-size: 2.4rem;

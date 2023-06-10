@@ -61,6 +61,7 @@ const AuthSideBar = memo(() => {
               icon={item.icon}
               title={item.title}
               dropBtn={item.dropBtn}
+              link={item.link}
             />
           );
         })}

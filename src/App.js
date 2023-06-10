@@ -15,6 +15,7 @@ import { ProtectedRoute } from "./layouts/ProtectedRoute";
 import Test from "./Test";
 import SystemPage from "./pages/SystemPage/Index";
 import ErrorPage404 from "./pages/ErrorPage/ErrorPage404";
+import Company from "./pages/Company/Company";
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
         </Route>
         <Route path="" element={<ProtectedRoute />}>
           <Route path="/hethong" element={<SystemPage />} />
-          <Route path="/nguoi-dung" element={<>123</>} />
+          <Route path="/company" element={<Company/>} />
         </Route>
       </Routes>
     </div>

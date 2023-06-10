@@ -1,6 +1,5 @@
 import { memo, useContext, useEffect, useState, useCallback } from "react";
 import "./SystemPage.scss";
-// import getAxiosData from "../../utils/AxiosData";
 import getData from "../../utils/GetData";
 import BtnPagination from "../../components/BtnPagination";
 import FTButton from "../../components/Button/FeatureBtn";
@@ -89,14 +88,17 @@ const SystemPage = memo(() => {
   const [filRole, setFilrole] = useState("");
   // sortby
   const [sortBy, setSortBy] = useState("");
-
+  // date start
+  const [dateStart, setDateStart] = useState("");
+  // date start
+  const [dateEnd, setDateEnd] = useState("");
   // url
   let url = "http://wlp.howizbiz.com/api/users";
   let pageParam = `?paginate=true&page=${page}&perpage=${perpage}`;
   let urlUser =
     url +
     pageParam +
-    `&with=roles,createdBy,provinces&search=${search}${inActive}${filRole}${sortBy}`;
+    `&with=roles,createdBy,provinces&search=${search}${inActive}${filRole}${sortBy}${dateStart}${dateEnd}`;
 
   useEffect(() => {
     const getUser = async () => {
@@ -151,7 +153,15 @@ const SystemPage = memo(() => {
     setCurrentBtn(1);
     setDecreaseBtn(1);
   };
-
+  // filter theo day
+  const filterDateStart = (e) => {
+    const day = e && e.split("-").reverse().join("%2F");
+    day ? setDateStart("&date_start=" + day) : setDateStart("");
+  };
+  const filterDateSEnd = (e) => {
+    const day = e && e.split("-").reverse().join("%2F");
+    day ? setDateEnd("&date_start=" + day) : setDateEnd("");
+  };
   let Btn = [];
   let totalPage =
     dataUser.length !== 0
@@ -235,7 +245,7 @@ const SystemPage = memo(() => {
           <div className="filter">
             <input
               type="date"
-              // onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => filterDateStart(e.target.value)}
               placeholder=" "
               required
             />
@@ -246,7 +256,7 @@ const SystemPage = memo(() => {
           <div className="filter">
             <input
               type="date"
-              // onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => filterDateSEnd(e.target.value)}
               placeholder=" "
               required
             />
