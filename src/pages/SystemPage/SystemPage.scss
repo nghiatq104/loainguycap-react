@@ -186,9 +186,9 @@
   }
 
   .list-user {
+    // width: 100%;
     overflow: scroll;
     height: calc(100vh - 380px);
-    // margin-top: 48px;
     &::-webkit-scrollbar {
       width: 5px;
       height: 5px;

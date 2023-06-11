@@ -11,16 +11,15 @@ import SmScSideBar from "../AuthSideBar/SmScSideBar";
 const AuContainer = styled.div`
   width: 100vw;
   margin-top: 60px;
-  margin: 0 auto;
-  max-width: 1600px;
+  display: flex;
 `;
 
 // HEADER
 const Header = styled.div`
   position: fixed;
   top: 0;
+  left: 0;
   width: 100vw;
-  max-width: 1600px;
   background-color: #fff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 `;
@@ -29,13 +28,11 @@ const Header = styled.div`
 const MainContainer = styled.div`
   width: 100%;
   margin-top: 60px;
-  display: flex;
 `;
 
 // FOOTER
 const Footer = styled.div`
   width: 100%;
-  max-width: 1600px;
   justify-content: space-between;
   align-items: center;
   height: 33px;
@@ -46,6 +43,7 @@ const Footer = styled.div`
   color: #757575;
   position: fixed;
   bottom: 0;
+  left: 0;
   display: flex;
   p {
     margin: 0;

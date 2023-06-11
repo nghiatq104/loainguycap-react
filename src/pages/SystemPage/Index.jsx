@@ -14,6 +14,7 @@ const MaintContainer = styled.div`
   flex: 1;
   overflow-y: scroll;
   max-height: calc(100vh - 93px);
+
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -46,13 +47,13 @@ const ListUser = styled.div`
       props.isSidebar &&
       css`
         width: calc(100vw - 114px);
-        max-width: calc(1600px - 82px);
+        max-width: calc(100vw - 82px);
       `};
     ${(props) =>
       !props.isSidebar &&
       css`
         width: calc(100vw - 364px);
-        max-width: calc(1600px - 332px);
+        max-width: calc(100vw - 332px);
       `};
   }
   @media (max-width: 650px) {

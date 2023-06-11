@@ -13,13 +13,16 @@ const SideContainer = styled.div`
   overflow: hidden;
   overflow-y: scroll;
   background-color: #fff;
+  position: fixed;
+  left: 0;
+  top: 60px;
   &::-webkit-scrollbar {
     width: 5px;
   }
   &::-webkit-scrollbar-thumb {
     background: #5f5f5f;
   }
-  position: fixed;
+
   @media (min-width: 651px) {
     ${(props) =>
       props.isSidebar &&

@@ -19,8 +19,8 @@ const StyleFTButton = styled.button`
     `}
 `;
 const StyleDivBtn = styled.div`
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@ const StyleDivBtn = styled.div`
     !props.unclick &&
     css`
       &:hover {
-        background-color: #ccc;
+        background-color: #fad2d2;
       }
     `}
   /* unclick */
