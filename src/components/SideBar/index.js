@@ -4,6 +4,13 @@ import BreakLine from "./BreakLine.js";
 import ListCheckBox from "../ListCheckBox";
 import getData from "../../utils/GetData";
 import API from "../../Constant/Api";
+import styled from "styled-components";
+
+const SideBarWrap = styled.div`
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
 
 const SideBar = React.memo(() => {
   console.log("Sidebar loaded");
@@ -85,7 +92,7 @@ const SideBar = React.memo(() => {
   }, []);
 
   return (
-    <div className="sideBar">
+    <SideBarWrap className="sideBar">
       <div className="sideBar-type">
         <div className="sideBar-title d-flex align-items-center">
           <div className="text-uppercase">loại</div>
@@ -125,7 +132,7 @@ const SideBar = React.memo(() => {
           );
         })}
       </div>
-    </div>
+    </SideBarWrap>
   );
 });
 export default SideBar;

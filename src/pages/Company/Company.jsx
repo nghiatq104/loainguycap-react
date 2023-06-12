@@ -23,7 +23,7 @@ const CompanyContainer = styled.div`
     ${(props) =>
       props.isSidebar &&
       css`
-        margin-left: 50px;
+        margin-left: 60px;
       `};
     ${(props) =>
       !props.isSidebar &&
@@ -43,12 +43,24 @@ const TbContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
+const Pagination = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const Company = memo(() => {
   // context modal
   const { isSidebar } = useContext(AdminContext);
   // data table
   const [dataTable, setDataTable] = useState([]);
-
+  // page
+  const [page, setPage] = useState(1);
+  // active btn
+  const [currentBtn, setCurrentBtn] = useState(1);
+  const [decreaseBtn, setDecreaseBtn] = useState(1);
   const url =
     "http://wlp.howizbiz.com/api/tochucs?paginate=true&page=1&perpage=10&with=roles,createdBy&search=&inactive=-1";
   useEffect(() => {
@@ -68,28 +80,62 @@ const Company = memo(() => {
     };
     GetData();
   }, [url]);
+
+  let Btn = [];
+  let totalPage =
+    dataTable.length !== 0
+      ? Math.ceil(
+          dataTable.pagination.total / dataTable.pagination.itemsPerPage
+        )
+      : 1;
+  for (let i = 0; i < totalPage; i++) {
+    Btn.push(
+      <BtnPagination
+        key={i + 1}
+        function={() => console.log(1315)}
+        value={i + 1}
+        title={i + 1}
+        activeClass={currentBtn === i + 1 ? "in-active" : ""}
+        unActive={currentBtn === i + 1 ? "un-active" : ""}
+      />
+    );
+  }
+
   return (
     <CompanyContainer isSidebar={isSidebar}>
       <NavSearch title="Tổ chức" />
       <TbContainer>
         <Table data={dataTable.list} />
-        <div className="pagin d-flex">
+        <Pagination>
           <div className="perpage-total">
-            {/* {dataUser.length !== 0 && (
+            {dataTable.length !== 0 && (
               <>
-                {dataUser.pagination.itemsPerPage * (page - 1) + 1}-
-                {dataUser.pagination.itemsPerPage * page >=
-                dataUser.pagination.total
-                  ? dataUser.pagination.total
-                  : dataUser.pagination.itemsPerPage * page}
-                /{dataUser.pagination.total}
+                {dataTable.pagination.itemsPerPage * (page - 1) + 1}-
+                {dataTable.pagination.itemsPerPage * page >=
+                dataTable.pagination.total
+                  ? dataTable.pagination.total
+                  : dataTable.pagination.itemsPerPage * page}
+                /{dataTable.pagination.total}
               </>
-            )} */}
+            )}
           </div>
 
           <div className="pagin-btn d-flex">
-            <BtnPagination key={-1} />
-            <BtnPagination key={0} />
+            <BtnPagination
+              key={-1}
+              value={-1}
+              title="&#60;"
+              activeClass={decreaseBtn === 1 ? "opacity" : ""}
+              unActive={decreaseBtn === 1 ? "un-active" : ""}
+            />
+            {Btn}
+            <BtnPagination
+              key={0}
+              value={1}
+              title="&#62;"
+              activeClass={decreaseBtn === totalPage ? "opacity" : ""}
+              unActive={decreaseBtn === totalPage ? "un-active" : ""}
+            />
           </div>
           <div className="option">
             <select
@@ -102,7 +148,7 @@ const Company = memo(() => {
               <option value={50}>50/Trang</option>
             </select>
           </div>
-        </div>
+        </Pagination>
       </TbContainer>
     </CompanyContainer>
   );

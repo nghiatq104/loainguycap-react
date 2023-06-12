@@ -27,7 +27,7 @@ const SideContainer = styled.div`
     ${(props) =>
       props.isSidebar &&
       css`
-        width: 50px;
+        width: 60px;
       `};
     ${(props) =>
       !props.isSidebar &&

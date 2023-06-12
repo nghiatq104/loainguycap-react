@@ -8,6 +8,7 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   padding-bottom: 16px;
+  justify-content: space-between;
 `;
 
 const LeftBtn = styled.div`

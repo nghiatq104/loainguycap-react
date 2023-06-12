@@ -6,6 +6,14 @@ import * as XLSX from "xlsx";
 import { apiContext } from "../../Context/ApiContext";
 import { NavTab } from "../../Context/NavTab";
 import useDebounce from "../../hook/Debounce";
+import styled from "styled-components";
+
+const NavLeft = styled.div`
+  @media (min-width: 1000px) {
+    height: 100%;
+    width: 35rem;
+  }
+`;
 
 const Nav = React.memo(() => {
   console.log("Nav loaded");
@@ -73,7 +81,7 @@ const Nav = React.memo(() => {
 
   return (
     <div className="nav-bar d-flex align-items-center">
-      <div className="nav-left"></div>
+      <NavLeft />
       <div className="nav-right d-flex align-items-center">
         <div className="tab">
           {navBtn.map((data, i) => {

@@ -1,10 +1,10 @@
 import { memo } from "react";
-import styled from "styled-components";
 import { useContext } from "react";
 import { AdminContext } from "../../Context/AdminPageContext";
 import Form from "../Form/AddForm";
 import EditForm from "../Form/EditForm";
 import DeletePopsUp from "../Form/DeletePopUp";
+import styled from "styled-components";
 
 const ModalContainer = styled.div`
   width: 100vw;
@@ -22,12 +22,12 @@ const StyleModal = styled.div`
   width: 50%;
   max-width: 500px;
   min-width: 350px;
-  height: 90%;
   background-color: #fff;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 90%;
 `;
 
 const Header = styled.div`
@@ -61,7 +61,6 @@ const Header = styled.div`
 `;
 const Modal = memo(() => {
   const { isAdd, setIsAdd, modal } = useContext(AdminContext);
-
   return (
     <ModalContainer show={isAdd}>
       <StyleModal>

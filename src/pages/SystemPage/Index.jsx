@@ -27,7 +27,7 @@ const MaintContainer = styled.div`
     ${(props) =>
       props.isSidebar &&
       css`
-        margin-left: 50px;
+        margin-left: 60px;
       `};
     ${(props) =>
       !props.isSidebar &&
@@ -46,8 +46,8 @@ const ListUser = styled.div`
     ${(props) =>
       props.isSidebar &&
       css`
-        width: calc(100vw - 114px);
-        max-width: calc(100vw - 82px);
+        width: calc(100vw - 124px);
+        max-width: calc(100vw - 92px);
       `};
     ${(props) =>
       !props.isSidebar &&
@@ -65,7 +65,6 @@ const LiTh = styled.li`
   align-items: center;
 `;
 
-// let token = localStorage.getItem("token");
 const SystemPage = memo(() => {
   // context modal
   const { setIsAdd, setUserId, setModal, isAdd, isSidebar } =
@@ -158,10 +157,16 @@ const SystemPage = memo(() => {
   const filterDateStart = (e) => {
     const day = e && e.split("-").reverse().join("%2F");
     day ? setDateStart("&date_start=" + day) : setDateStart("");
+    setPage(1);
+    setCurrentBtn(1);
+    setDecreaseBtn(1);
   };
   const filterDateSEnd = (e) => {
     const day = e && e.split("-").reverse().join("%2F");
     day ? setDateEnd("&date_start=" + day) : setDateEnd("");
+    setPage(1);
+    setCurrentBtn(1);
+    setDecreaseBtn(1);
   };
   let Btn = [];
   let totalPage =

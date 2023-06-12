@@ -27,7 +27,6 @@ const Header = styled.div`
 // CONTENT
 const MainContainer = styled.div`
   width: 100%;
-  margin-top: 60px;
 `;
 
 // FOOTER
