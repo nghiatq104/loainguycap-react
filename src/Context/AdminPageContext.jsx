@@ -5,6 +5,7 @@ const AdminContext = createContext();
 
 const AdminProvider = ({ children }) => {
   const [isSidebar, setIsSidebar] = useState(false);
+
   const [isAdd, setIsAdd] = useState(false);
   const sidebarRef = useRef(null);
   // id

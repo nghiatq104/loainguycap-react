@@ -31,13 +31,15 @@ const Footer = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  div {
-    height: 100%;
-    justify-content: end;
-    display: flex;
-    align-items: center;
-  }
 `;
+
+const BtnWrap = styled.div`
+  height: 100%;
+  justify-content: end;
+  display: flex;
+  align-items: center;
+`;
+
 const DeletePopsUp = () => {
   // loadbutton
   const [isLoad, setIsLoad] = useState(false);
@@ -49,14 +51,11 @@ const DeletePopsUp = () => {
     setIsLoad(true);
     console.log(userId.id);
     try {
-      const response = await axios.delete(
-        `http://wlp.howizbiz.com/api/users/${userId.id}`
-      );
-      console.log(response.data);
-      alert("Xóa thành công");
+      await axios.delete(`http://wlp.howizbiz.com/api/users/${userId.id}`);
+      console.log("Xóa thành công");
       setIsAdd(false);
     } catch (error) {
-      alert(error);
+      console.log(error);
     } finally {
       setIsLoad(false);
     }
@@ -68,7 +67,7 @@ const DeletePopsUp = () => {
         {userId.username ? <i>{userId.username}</i> : ""}
       </StBody>
       <Footer>
-        <div>
+        <BtnWrap>
           <Btn
             title="Hủy"
             handleClick={() => {
@@ -83,7 +82,7 @@ const DeletePopsUp = () => {
             iscolor={true}
             isloading={isLoad}
           />
-        </div>
+        </BtnWrap>
       </Footer>
     </StDeleteComponent>
   );

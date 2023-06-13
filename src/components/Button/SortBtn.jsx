@@ -1,17 +1,27 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Icondiv = styled.div`
   width: 20px;
   height: 20px;
-  opacity: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: rgba(0, 0, 0, 0.5);
-  &:hover {
-    opacity: 1;
-  }
+  transition: all 0.5s ease;
+  ${(props) =>
+    props.btnSort === 0 &&
+    css`
+      opacity: 0;
+      &:hover {
+        opacity: 1;
+      }
+    `}
+  ${(props) =>
+    props.btnSort === 2 &&
+    css`
+      transform: rotate(-180deg);
+    `};
 `;
 
 const SortBtn = ({ value, sortBy, setSortBy }) => {
@@ -40,7 +50,7 @@ const SortBtn = ({ value, sortBy, setSortBy }) => {
     }
   };
   return (
-    <Icondiv onClick={onSortBy}>
+    <Icondiv btnSort={btnSort} onClick={onSortBy}>
       <i className="fa-solid fa-arrow-up"></i>
     </Icondiv>
   );

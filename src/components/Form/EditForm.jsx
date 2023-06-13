@@ -183,15 +183,11 @@ const EditForm = memo(() => {
     };
     console.log(typeof user.id);
     try {
-      const response = axios.put(
-        `http://wlp.howizbiz.com/api/users/${userId.id}`,
-        user
-      );
-      console.log(response.data);
-      alert("Sửa thành công");
+      axios.put(`http://wlp.howizbiz.com/api/users/${userId.id}`, user);
+      console.log("Sửa thành công");
       setIsAdd(false);
     } catch (error) {
-      alert("Sửa thất bại");
+      console.log("Sửa thất bại");
       setDataErrors(error.response.data.errors);
     } finally {
       setIsLoad(false);

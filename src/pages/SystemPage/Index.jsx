@@ -67,19 +67,17 @@ const LiTh = styled.li`
 
 const SystemPage = memo(() => {
   // context modal
-  const { setIsAdd, setUserId, setModal, isAdd, isSidebar } =
+  const { setIsAdd, setUserId, setModal, isSidebar, isAdd } =
     useContext(AdminContext);
   // loading
   const [loading, setLoading] = useState(false);
-
   // data user
   const [dataUser, setDataUser] = useState([]);
   // paging
   const [page, setPage] = useState(1);
-  const [perpage, setPerpage] = useState(5);
+  const [perpage, setPerpage] = useState(10);
   // active btn
   const [currentBtn, setCurrentBtn] = useState(1);
-  const [decreaseBtn, setDecreaseBtn] = useState(1);
   // search
   const [search, setSearch] = useState("");
   // filter theo inactive
@@ -120,14 +118,12 @@ const SystemPage = memo(() => {
     setPerpage(e.target.value);
     setPage(1);
     setCurrentBtn(1);
-    setDecreaseBtn(1);
   };
 
   // click button page
   const onCurrentPage = useCallback((value) => {
     setPage(value);
     setCurrentBtn(value);
-    setDecreaseBtn(value);
   }, []);
 
   // click next previous button
@@ -135,7 +131,6 @@ const SystemPage = memo(() => {
     if (page < totalPage || page > 1) {
       setPage(page + value);
       setCurrentBtn(page + value);
-      setDecreaseBtn(page + value);
     }
   };
   // search name and phoneNumber
@@ -143,7 +138,6 @@ const SystemPage = memo(() => {
     e.target.value !== "" ? setSearch(e.target.value) : setSearch("");
     setPage(1);
     setCurrentBtn(1);
-    setDecreaseBtn(1);
   }, 500);
 
   // filter theo trangj thai
@@ -151,7 +145,6 @@ const SystemPage = memo(() => {
     callback(e);
     setPage(1);
     setCurrentBtn(1);
-    setDecreaseBtn(1);
   };
   // filter theo day
   const filterDateStart = (e) => {
@@ -159,14 +152,12 @@ const SystemPage = memo(() => {
     day ? setDateStart("&date_start=" + day) : setDateStart("");
     setPage(1);
     setCurrentBtn(1);
-    setDecreaseBtn(1);
   };
   const filterDateSEnd = (e) => {
     const day = e && e.split("-").reverse().join("%2F");
     day ? setDateEnd("&date_start=" + day) : setDateEnd("");
     setPage(1);
     setCurrentBtn(1);
-    setDecreaseBtn(1);
   };
   let Btn = [];
   let totalPage =
@@ -186,7 +177,7 @@ const SystemPage = memo(() => {
     );
   }
   return (
-    <MaintContainer isSidebar={isSidebar}>
+    <MaintContainer isAdd={isAdd} isSidebar={isSidebar}>
       <div className="user-title">
         <div className="icon-title">
           <i className="fa-solid fa-user"></i>
@@ -420,8 +411,8 @@ const SystemPage = memo(() => {
               function={onChangePage}
               value={-1}
               title="&#60;"
-              activeClass={decreaseBtn === 1 ? "opacity" : ""}
-              unActive={decreaseBtn === 1 ? "un-active" : ""}
+              activeClass={currentBtn === 1 ? "opacity" : ""}
+              unActive={currentBtn === 1 ? "un-active" : ""}
             />
             {Btn}
             <BtnPagination
@@ -429,12 +420,16 @@ const SystemPage = memo(() => {
               function={onChangePage}
               value={1}
               title="&#62;"
-              activeClass={decreaseBtn === totalPage ? "opacity" : ""}
-              unActive={decreaseBtn === totalPage ? "un-active" : ""}
+              activeClass={currentBtn === totalPage ? "opacity" : ""}
+              unActive={currentBtn === totalPage ? "un-active" : ""}
             />
           </div>
           <div className="option">
-            <select className="select" onChange={(e) => changePerpage(e)}>
+            <select
+              className="select"
+              value={perpage}
+              onChange={(e) => changePerpage(e)}
+            >
               <option value={5}>5/Trang</option>
               <option value={10}>10/Trang</option>
               <option value={25}>25/Trang</option>

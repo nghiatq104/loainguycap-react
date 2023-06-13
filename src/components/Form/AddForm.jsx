@@ -36,14 +36,13 @@ const Footer = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  div {
-    height: 100%;
-    width: 50%;
-    display: flex;
-    align-items: center;
-  }
 `;
-
+const BtnWrap = styled.div`
+  height: 100%;
+  justify-content: end;
+  display: flex;
+  align-items: center;
+`;
 const InputContainer = styled.div`
   width: 100%;
   min-height: 86px;
@@ -202,7 +201,6 @@ const Form = memo(() => {
     };
     getRoles();
   }, [url]);
-  // console.log(roles);
   // function show pass
   const showPassword = (e, showPass, setShowPass, setShow) => {
     e.preventDefault();
@@ -226,12 +224,10 @@ const Form = memo(() => {
       password: data.password,
       password_confirmation: data.passwordConfirm,
       role_ids: arrRole && arrRole.map((role) => role.id),
-      // role_ids: [1, 2, 3, 4, 5],
 
       khubaoton: data.khubaoton ? data.khubaoton : [],
       provinces: data.provinces ? data.provinces : [],
     };
-    // console.log(datauser);
 
     setIsLoad(true);
     try {
@@ -241,11 +237,11 @@ const Form = memo(() => {
         },
       });
       setIsAdd(false);
-      alert("Thêm mới thành công");
+      console.log("Thêm mới thành công");
     } catch (error) {
       const Errors = error.response.data.errors;
       setDataErrors(Errors);
-      alert("Khởi tạo thất bại");
+      console.log("Khởi tạo thất bại");
     } finally {
       setIsLoad(false);
     }
@@ -363,7 +359,7 @@ const Form = memo(() => {
         </InputContainer>
       </Body>
       <Footer>
-        <div>
+        <BtnWrap>
           <Btn
             title="Hủy"
             handleClick={() => {
@@ -377,7 +373,7 @@ const Form = memo(() => {
             iscolor={true}
             isloading={isLoad}
           />
-        </div>
+        </BtnWrap>
       </Footer>
     </StyleForm>
   );

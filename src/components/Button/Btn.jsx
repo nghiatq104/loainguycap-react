@@ -2,7 +2,6 @@ import { memo } from "react";
 import styled, { css, keyframes } from "styled-components";
 
 const StBtnContainer = styled.div`
-  /* width: 100%; */
   height: 100%;
   margin: 0 8px;
   display: flex;
@@ -12,7 +11,7 @@ const StBtnContainer = styled.div`
 `;
 
 const StButton = styled.button`
-  /* width: 100%; */
+  width: 100%;
   height: 100%;
   outline: none;
   background: none;
@@ -46,13 +45,12 @@ const loading = keyframes`
     }
 `;
 const StLoading = styled.div`
-  position: absolute;
   ${(props) =>
     props.isloading &&
     css`
-      width: 100% !important;
+      position: absolute;
+      width: 100%;
       height: 100%;
-
       left: 0;
       background-color: rgba(0, 0, 0, 0.4);
       display: flex;
@@ -72,7 +70,7 @@ const StLoading = styled.div`
   ${(props) =>
     !props.isloading &&
     css`
-      z-index: -1;
+      display: none;
     `};
 `;
 const Btn = memo((props) => {

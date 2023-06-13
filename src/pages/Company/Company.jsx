@@ -49,6 +49,25 @@ const Pagination = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .perpage-total {
+    font-size: 1.4rem;
+  }
+  .option {
+    width: 110px;
+    height: 26px;
+    background-color: aqua;
+    .select {
+      width: 100%;
+      height: 100%;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid #c9c9c9;
+      font-size: 1.6rem;
+      &:hover {
+        border-bottom: 1px solid #000;
+      }
+    }
+  }
 `;
 
 const Company = memo(() => {
@@ -58,11 +77,11 @@ const Company = memo(() => {
   const [dataTable, setDataTable] = useState([]);
   // page
   const [page, setPage] = useState(1);
+  const [perpage, setPerPage] = useState(10);
+
   // active btn
   const [currentBtn, setCurrentBtn] = useState(1);
-  const [decreaseBtn, setDecreaseBtn] = useState(1);
-  const url =
-    "http://wlp.howizbiz.com/api/tochucs?paginate=true&page=1&perpage=10&with=roles,createdBy&search=&inactive=-1";
+  const url = `http://wlp.howizbiz.com/api/tochucs?paginate=true&page=${page}&perpage=${perpage}&with=roles,createdBy&search=&inactive=-1`;
   useEffect(() => {
     const GetData = async () => {
       const config = {
@@ -81,6 +100,11 @@ const Company = memo(() => {
     GetData();
   }, [url]);
 
+  const onChangePage = (e) => {
+    setPage(e);
+    setCurrentBtn(e);
+  };
+
   let Btn = [];
   let totalPage =
     dataTable.length !== 0
@@ -92,7 +116,7 @@ const Company = memo(() => {
     Btn.push(
       <BtnPagination
         key={i + 1}
-        function={() => console.log(1315)}
+        function={(e) => onChangePage(e.target.value)}
         value={i + 1}
         title={i + 1}
         activeClass={currentBtn === i + 1 ? "in-active" : ""}
@@ -124,23 +148,25 @@ const Company = memo(() => {
             <BtnPagination
               key={-1}
               value={-1}
+              function={(e) => onChangePage(e.target.value + page)}
               title="&#60;"
-              activeClass={decreaseBtn === 1 ? "opacity" : ""}
-              unActive={decreaseBtn === 1 ? "un-active" : ""}
+              activeClass={currentBtn === 1 ? "opacity" : ""}
+              unActive={currentBtn === 1 ? "un-active" : ""}
             />
             {Btn}
             <BtnPagination
               key={0}
               value={1}
+              function={(e) => onChangePage(e.target.value + page)}
               title="&#62;"
-              activeClass={decreaseBtn === totalPage ? "opacity" : ""}
-              unActive={decreaseBtn === totalPage ? "un-active" : ""}
+              activeClass={currentBtn === totalPage ? "opacity" : ""}
+              unActive={currentBtn === totalPage ? "un-active" : ""}
             />
           </div>
           <div className="option">
             <select
               className="select"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => setPerPage(e.target.value)}
             >
               <option value={5}>5/Trang</option>
               <option value={10}>10/Trang</option>

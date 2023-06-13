@@ -4,7 +4,7 @@ import { AdminContext } from "../../Context/AdminPageContext";
 import Form from "../Form/AddForm";
 import EditForm from "../Form/EditForm";
 import DeletePopsUp from "../Form/DeletePopUp";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const ModalContainer = styled.div`
   width: 100vw;
@@ -27,7 +27,14 @@ const StyleModal = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 90%;
+  ${(props) =>
+    props.modal
+      ? css`
+          max-height: 90%;
+        `
+      : css`
+          height: 90%;
+        `};
 `;
 
 const Header = styled.div`
@@ -63,7 +70,7 @@ const Modal = memo(() => {
   const { isAdd, setIsAdd, modal } = useContext(AdminContext);
   return (
     <ModalContainer show={isAdd}>
-      <StyleModal>
+      <StyleModal modal={modal === "delete"}>
         <Header>
           <h2>
             {

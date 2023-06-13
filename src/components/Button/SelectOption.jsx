@@ -120,11 +120,10 @@ const MultiSelectOptions = (props) => {
     : [];
   // lay data
   const RoleOptions = props.data;
-  // console.log(RoleOptions);
 
   const [selectedOptions, setSelectedOptions] = useState(selectedOptionsProp);
   const [isShow, setIsShow] = useState(false);
-  // console.log(selectedOptions);
+
   const handleOptionChange = (event) => {
     const { value, checked, id } = event.target;
     if (checked) {
@@ -139,7 +138,7 @@ const MultiSelectOptions = (props) => {
   useEffect(() => {
     setArrRole(selectedOptions);
   }, [selectedOptions, setArrRole]);
-  // console.log(selectedOptions);
+
   return (
     <StSelectOption>
       <StInputClick onClick={() => setIsShow(true)}>
