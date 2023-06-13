@@ -2,8 +2,6 @@ import { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../Button/Btn";
 import { useForm } from "react-hook-form";
-// import { useContext } from "react";
-// import { AdminContext } from "../../Context/AdminPageContext";
 import axios from "axios";
 
 const StyleForm = styled.form`
@@ -164,7 +162,6 @@ const DropdownInt = styled.div`
 let token = localStorage.getItem("token");
 
 const ChangePassForm = memo(() => {
-  //   const { setIsAdd } = useContext(AdminContext);
   // roles
   const [roles, setRoles] = useState([]);
   // show pass

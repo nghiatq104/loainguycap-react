@@ -9,7 +9,6 @@ import styled, { css } from "styled-components";
 const ModalContainer = styled.div`
   width: 100vw;
   height: 100vh;
-  max-width: 1600px;
   z-index: 3;
   top: 0;
   position: fixed;

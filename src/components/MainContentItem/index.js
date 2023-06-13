@@ -6,9 +6,10 @@ const MainContentItem = (props) => {
   const navigate = useNavigate();
   const arr = props.data;
   const active = props.active;
+  const col = props.col || "col-lg-4"
   let gridItem = (
     <div
-      className="col-12 col-sm-12 col-md-6 col-lg-4 item-container"
+      className={"col-12 col-sm-12 col-md-6 " + col  +" item-container"}
       onClick={() => navigate(`/loai/${arr.id}`)}
     >
       <div className="item-content">

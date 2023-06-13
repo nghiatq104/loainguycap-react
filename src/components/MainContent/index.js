@@ -22,14 +22,6 @@ const MainContent = React.memo((props) => {
   const [hideLoad, setHideLoad] = useState("");
   const [btnLoad, setBtnLoad] = useState("");
 
-  // useEffect(() => {
-  //   async function getDataTest() {
-  //     const data = await getAxiosData(API.listSpecies, "");
-  //     // console.log(data);
-  //   }
-  //   getDataTest();
-  // });
-  // load data mac dinh
   useEffect(() => {
     async function getApiData() {
       try {

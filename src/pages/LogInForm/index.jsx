@@ -3,12 +3,12 @@ import "./LoginForm.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { authContext } from "../../Context/AuthContext";
-import ErrorLoginFail from "../../components/PopsUp/LoginFailPopUp";
+import Notification from "../../components/PopsUp/PopsUp";
+import { memo } from "react";
 
 function LoginForm() {
-  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated } = useContext(authContext);
+  const { isAuthenticated, errorLog } = useContext(authContext);
   isAuthenticated ? navigate("/hethong") : console.log("Login");
   const { Login } = useContext(authContext);
   const [showPass, setShowPass] = useState("password");
@@ -37,20 +37,15 @@ function LoginForm() {
       await Login(data);
       navigate("/hethong");
     } catch (error) {
-      console.error("Error :" + error);
-      alert("username or password is not correct");
-      setIsError(true);
+      console.log(error);
     } finally {
       setLoadLogin("");
-      setTimeout(() => setIsError(false), 2000);
     }
   };
-  // useEffect(() => {
-  //   setIsError(false);
-  // }, []);
+
   return (
     <>
-      <ErrorLoginFail isFail={isError} />
+      <Notification type={errorLog} />
       <div className="login-form-container">
         <div className="title-header">
           <Link to="/" className="img_contain">
@@ -111,4 +106,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default memo(LoginForm);

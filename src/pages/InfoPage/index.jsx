@@ -4,7 +4,6 @@ import "./InfoPage.scss";
 import getData from "../../utils/GetData";
 
 const InfoPage = React.memo(() => {
-  // console.log("info loaded");
   let [news, setNews] = useState([]);
 
   useEffect(() => {

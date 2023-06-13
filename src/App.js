@@ -16,6 +16,7 @@ import Test from "./Test";
 import SystemPage from "./pages/SystemPage/Index";
 import ErrorPage404 from "./pages/ErrorPage/ErrorPage404";
 import Company from "./pages/Company/Company";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
             </>
           }
         >
+          <Route>
+            <Route path="/" element={<Home ></Home>} />
+            <Route path="loai/:id" element={<Species />} />
+          </Route>
           <Route>
             <Route path="search" element={<Body />} />
             <Route path="loai/:id" element={<Species />} />

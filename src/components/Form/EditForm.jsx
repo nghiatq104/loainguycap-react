@@ -36,12 +36,12 @@ const Footer = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  div {
-    height: 100%;
-    justify-content: end;
-    display: flex;
-    align-items: center;
-  }
+`;
+const BtnWrap = styled.div`
+  height: 100%;
+  justify-content: end;
+  display: flex;
+  align-items: center;
 `;
 
 const InputContainer = styled.div`
@@ -168,8 +168,7 @@ const EditForm = memo(() => {
   }, [userId]);
   console.log(userId);
   // Edit user
-  console.log(selectedRoles);
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setIsLoad(true);
     const user = {
       username: userId.username,
@@ -181,9 +180,8 @@ const EditForm = memo(() => {
       khubaoton: data.khubaoton ? data.khubaoton : userId.khubaoton,
       provinces: data.provinces ? data.provinces : userId.provinces,
     };
-    console.log(typeof user.id);
     try {
-      axios.put(`http://wlp.howizbiz.com/api/users/${userId.id}`, user);
+      await axios.put(`http://wlp.howizbiz.com/api/users/${userId.id}`, user);
       console.log("Sửa thành công");
       setIsAdd(false);
     } catch (error) {
@@ -276,7 +274,7 @@ const EditForm = memo(() => {
         </InputContainer>
       </Body>
       <Footer>
-        <div>
+        <BtnWrap>
           <Btn
             title="Hủy"
             handleClick={() => {
@@ -291,7 +289,7 @@ const EditForm = memo(() => {
             iscolor={true}
             isloading={isLoad}
           />
-        </div>
+        </BtnWrap>
       </Footer>
     </StyleForm>
   );

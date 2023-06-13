@@ -4,6 +4,7 @@ import { createContext, useState } from "react";
 export const authContext = createContext({ auth: null });
 let _token = localStorage.getItem("token");
 const AuthProvider = ({ children }) => {
+  const [errorLog, setErrorLog] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [token, setToken] = useState(_token);
@@ -55,8 +56,10 @@ const AuthProvider = ({ children }) => {
       await checkAuth(token);
       // Đặt trạng thái đăng nhập thành true
       setIsAuthenticated(true);
+      setErrorLog("");
     } catch (error) {
       console.error(error);
+      setErrorLog("LOGIN_FAIL");
     }
   };
 
@@ -64,10 +67,9 @@ const AuthProvider = ({ children }) => {
   const Logout = async () => {
     // Xóa token từ localStorage hoặc trạng thái ứng dụng
     try {
-      const response = await axios.post("http://wlp.howizbiz.com/api/me", {
+      await axios.post("http://wlp.howizbiz.com/api/logout", {
         token: _token,
       });
-      console.log(response.data);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setToken(null);
@@ -88,6 +90,8 @@ const AuthProvider = ({ children }) => {
         Logout,
         token,
         config,
+        errorLog,
+        setErrorLog,
       }}
     >
       {children}
