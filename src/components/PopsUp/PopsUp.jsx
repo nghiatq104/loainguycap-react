@@ -33,7 +33,7 @@ const PuContainer = styled.div`
   transform: translateX(-50%);
   i {
     font-size: 2rem;
-    color: ${(props) => props.iconcolor && props.iconcolor};
+    color: ${(props) => props.iconColor && props.iconcolor};
   }
   animation: ${PuShow} 3s ease-in-out;
 `;
@@ -78,7 +78,7 @@ const Notification = memo((props) => {
       message: "Đăng nhập thất bại",
       type: "LOGIN_FAIL",
       icon: "fa-solid fa-triangle-exclamation",
-      iconcolor: "#da2a1c",
+      iconColor: "#da2a1c",
     },
   ];
   return (
@@ -99,7 +99,7 @@ const Toast = (props) => {
   let data = props.data[0];
   const handleClick = props.handleClick;
   return (
-    <PuContainer iconcolor={data.iconcolor}>
+    <PuContainer iconColor={data.iconColor}>
       <i className={data.icon}></i>
       <DivError>
         <h3>{data.title}</h3>

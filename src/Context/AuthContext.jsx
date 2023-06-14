@@ -66,10 +66,13 @@ const AuthProvider = ({ children }) => {
   // Hàm đăng xuất
   const Logout = async () => {
     // Xóa token từ localStorage hoặc trạng thái ứng dụng
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     try {
-      await axios.post("http://wlp.howizbiz.com/api/logout", {
-        token: _token,
-      });
+      await axios.post("http://wlp.howizbiz.com/api/logout", _token, config);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setToken(null);

@@ -33,7 +33,6 @@ const SortBtn = ({ value, sortBy, setSortBy }) => {
       } else {
         setSortBy(sortBy + "," + value);
       }
-
       setBtnSort(1);
     } else if (btnSort === 1) {
       setSortBy(sortBy.replace(value, "-" + value));
