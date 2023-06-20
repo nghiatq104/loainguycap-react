@@ -25,10 +25,10 @@ const AuthProvider = ({ children }) => {
         "http://wlp.howizbiz.com/api/me",
         config
       );
-      // let user = JSON.stringify(response.user);
+
       setIsAuthenticated(true);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      // console.log(response);
+
       return response;
     } catch (error) {
       Logout();
@@ -37,7 +37,6 @@ const AuthProvider = ({ children }) => {
     }
   };
   if (!isChecking && !isAuthenticated && token) {
-    // console.log("has token");
     checkAuth(token);
   }
 

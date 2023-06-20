@@ -38,7 +38,7 @@ function App() {
           }
         >
           <Route>
-            <Route path="/" element={<Home ></Home>} />
+            <Route path="/" element={<Home />} />
             <Route path="loai/:id" element={<Species />} />
           </Route>
           <Route>
@@ -54,7 +54,7 @@ function App() {
         </Route>
         <Route path="" element={<ProtectedRoute />}>
           <Route path="/hethong" element={<SystemPage />} />
-          <Route path="/company" element={<Company/>} />
+          <Route path="/company" element={<Company />} />
         </Route>
       </Routes>
     </div>
